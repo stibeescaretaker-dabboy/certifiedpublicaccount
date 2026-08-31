@@ -30,7 +30,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
               #e79140 61%, #fecc12 69%, #fef100 100%);
 }
 #bg-tile {
-  position: absolute; left: 10000px; top: 0; width: 4000px; height: 100%; z-index: 1;
+  position: absolute; left: 0; top: 0; width: 24000px; height: 100%; z-index: 1;
   background: url("../images/tile.jpg") repeat; background-size: 500px 250px;
 }
 #floaters { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 6; pointer-events: none; }

@@ -149,7 +149,10 @@
     requestAnimationFrame(frame);
   }
   Array.prototype.forEach.call(document.querySelectorAll('.arrow-box'), function (a) {
-    a.addEventListener('click', function (e) { e.stopPropagation(); flyTo(a.getAttribute('data-goto')); });
+    a.addEventListener('click', function (e) {
+      if (moved >= 8) { e.stopPropagation(); e.preventDefault(); return; } /* it was a drag, not a tap */
+      e.stopPropagation(); flyTo(a.getAttribute('data-goto'));
+    });
   });
 
   /* ---- floaters: slow random drift across the world ---- */
@@ -183,8 +186,8 @@
         x: lo + ((i * 3671 + 911) % (hi - lo - 600)),
         y: COL_Y - 2000 + ((i * 2731 + 577) % Math.max(1000, colH + 4000)),
         /* pace: bump these ranges to speed up / slow down the drift */
-        vx: (Math.random() * 20 + 12) * (Math.random() < 0.5 ? -1 : 1),
-        vy: (Math.random() * 12 + 6) * (Math.random() < 0.5 ? -1 : 1),
+        vx: (Math.random() * 30 + 18) * (Math.random() < 0.5 ? -1 : 1),
+        vy: (Math.random() * 18 + 9) * (Math.random() < 0.5 ? -1 : 1),
         ph: Math.random() * 6.28
       });
     });
