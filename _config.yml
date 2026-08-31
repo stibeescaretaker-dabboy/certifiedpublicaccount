@@ -1,0 +1,34 @@
+title: Sebastian Cole Galvan
+description: >-
+  Sebastian Cole Galvan — finished works 2022–2025. An interactive
+  click-and-drag, pinch-and-zoom gallery built with Jekyll for GitHub Pages.
+baseurl: ""            # leave "" for username.github.io; set "/repo-name" for a project site
+url: ""                # e.g. https://yourname.github.io
+markdown: kramdown
+exclude:
+  - _preview
+  - "*.ps1"
+  - test-mcp.js
+  - search-ext.js
+  - jekyll.log
+  - jekyll.err.log
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - blueprint.png
+  - header.png
+  - "header 2.png"
+  - "section 1.png"
+  - "section 2.png"
+  - "section 3.png"
+  - "section 4.png"
+  - "section 5.png"
+  - "section 1_files"
+  - "section 2_files"
+  - "section 3_files"
+  - "section 4_files"
+  - "section 5_files"
+  - background_files
+  - header_files
+  - tool_files
+  - floaters

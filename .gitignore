@@ -1,0 +1,33 @@
+# --- build artifacts / local tooling ---
+_preview/
+/site/
+/_site/
+.jekyll-cache/
+.sass-cache/
+Gemfile.lock
+*.ps1
+test-mcp.js
+search-ext.js
+jekyll.log
+jekyll.err.log
+
+# --- large layout-guide PNGs (site is rebuilt in HTML/CSS from assets/images) ---
+/blueprint.png
+/header.png
+/header 2.png
+/section 1.png
+/section 2.png
+/section 3.png
+/section 4.png
+/section 5.png
+
+# --- original source folders (site uses optimized copies in assets/images) ---
+/section 1_files/
+/section 2_files/
+/section 3_files/
+/section 4_files/
+/section 5_files/
+/background_files/
+/header_files/
+/tool_files/
+/floaters/

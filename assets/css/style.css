@@ -1,0 +1,108 @@
+/* =====================================================================
+   Sebastian Cole Galvan — pan & zoom gallery
+   World units: 1 world unit = 1 CSS px at zoom scale 1.
+   World geometry (keep in sync with panzoom.js):
+     WORLD_W = 24000 | column: x 10000..14000, y 6000..6000+colH
+   ===================================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden; background: #000;
+  overscroll-behavior: none; touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif; user-select: none;
+  cursor: url("../images/cursor-open.png") 10 16, auto;
+}
+body.dragging { cursor: url("../images/cursor-closed.png") 7 11, auto; }
+img { display: block; -webkit-user-drag: none; user-select: none; }
+
+/* ---- world & backgrounds ---- */
+#world {
+  position: absolute; left: 0; top: 0;
+  width: 24000px; height: 60000px;             /* JS refines height */
+  transform-origin: 0 0; will-change: transform;
+}
+#bg-gradient {
+  position: absolute; left: 0; top: 0; width: 24000px; height: 100%; z-index: 0;
+  /* sampled from blueprint: TL cyan -> TR magenta -> BL orange -> BR yellow */
+  background: linear-gradient(135deg, #00aeee 0%, #a723b1 19%, #e71684 39%,
+              #e79140 61%, #fecc12 69%, #fef100 100%);
+}
+#bg-tile {
+  position: absolute; left: 10000px; top: 0; width: 4000px; height: 100%; z-index: 1;
+  background: url("../images/tile.jpg") repeat; background-size: 500px 250px;
+}
+#floaters { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 6; pointer-events: none; }
+#floaters > * { position: absolute; left: 0; top: 0; will-change: transform; }
+#floaters img, #floaters video { width: 100%; height: auto; }
+
+/* ---- central column ---- */
+#column { position: absolute; left: 10000px; top: 6000px; width: 4000px; z-index: 3; }
+.block { width: 100%; background: #000; position: relative; }
+
+/* ---- header 1 : name ---- */
+.header-block { padding: 220px 130px 150px; }
+.site-name {
+  display: flex; justify-content: space-between;
+  font-size: 168px; line-height: 1; color: #fff; font-weight: bold; letter-spacing: 4px;
+}
+.site-name .star { color: #ffe14f; font-style: normal; }
+.wip { position: relative; height: 150px; margin-top: 6px; font-weight: bold; font-size: 120px; line-height: 1; }
+.wip span { position: absolute; }
+.wip .b { color: #3aa0ff; }
+.wip .m { color: #ff2fa0; }
+.howto { margin-top: 130px; color: #fff; font-size: 44px; line-height: 1.7; }
+
+/* ---- dividers ---- */
+.divider-thin {
+  height: 36px;
+  background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
+}
+.divider-big {
+  position: relative; height: 700px; opacity: .85;
+  background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
+}
+.arrow-box {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  background: #fff; padding: 26px 58px;
+}
+.arrow-box img { width: 190px; height: auto; }
+
+/* ---- section 1 : CGI filmstrip ---- */
+.sec1 .filmstrip { background: #fff; display: flex; justify-content: center; gap: 26px; padding: 34px 0; }
+.filmstrip img { height: 480px; width: auto; }
+.sec1-text { padding: 90px 560px 100px; color: #fff; }
+.sec1-text h2 { font-size: 46px; margin-bottom: 16px; }
+.sec1-text .meta { font-size: 34px; font-weight: bold; margin-bottom: 44px; }
+.sec1-text .body { font-size: 28px; line-height: 1.55; text-align: justify; max-width: 2840px; }
+
+/* ---- section 2 : poem ---- */
+.sec2 { display: flex; gap: 150px; padding: 170px 200px; }
+.poem-img { width: 1250px; flex: none; height: auto; }
+.poem-text { color: #fff; font-style: italic; font-size: 34px; line-height: 1.5; padding-top: 50px; }
+.poem-text p { margin-bottom: 120px; max-width: 1750px; }
+.poem-text .duo { display: flex; gap: 150px; max-width: none; }
+.poem-text .caption { font-style: normal; font-weight: bold; margin-top: 40px; margin-bottom: 0; }
+
+/* ---- sections 3-5 : artwork ---- */
+.sec { padding: 170px 160px; }
+.sec img { width: 100%; height: auto; }
+.sec3 .fish-row { display: flex; gap: 120px; margin: 130px 0; }
+.sec3 .fish-row img { width: calc(50% - 60px); }
+.sec3 .fish-wide { width: 64%; margin: 0 auto; }
+.sec4 img { width: 76%; margin: 0 auto; }
+.sec5 img { width: 92%; margin: 0 auto; }
+
+/* ---- header 2 : finished works ---- */
+.header2 { padding: 80px 110px 160px; }
+.work-nav { display: flex; justify-content: space-between; font-size: 38px; color: #fff; }
+.work-nav .y { color: #ffe14f; }
+.works-title {
+  display: flex; justify-content: space-between; width: 88%; margin-top: 180px;
+  font-size: 168px; color: #3aa0ff; font-weight: bold; letter-spacing: 2px;
+}
+.works-years {
+  display: flex; justify-content: space-between; width: 86%; margin-top: 50px;
+  font-size: 132px; color: #ff2fa0; font-weight: bold;
+}
