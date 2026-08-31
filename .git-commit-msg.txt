@@ -1,1 +1,0 @@
-Fix baseurl for project pages, full-width bg tile, 1.5x floater speed, suppress arrow click after drag
