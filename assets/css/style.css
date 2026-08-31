@@ -102,6 +102,15 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .sec4 img { width: 76%; margin: 0 auto; }
 .sec5 img { width: 92%; margin: 0 auto; }
 
+/* ---- sections 3-5 (new) : baro / statement / flydraw ---- */
+.secbaro img { width: 66%; margin: 0 auto; }
+.secstatement { background: #000; padding: 220px 360px; }
+.secstatement h2 { color: #fff; font-size: 74px; font-weight: bold; margin-bottom: 140px; }
+.secstatement p { color: #fff; font-size: 36px; line-height: 1.6; max-width: 2900px; margin: 0 auto 120px; padding-left: 480px; }
+.secstatement p:last-child { margin-bottom: 0; }
+.secflydraw .fly-main { width: 56%; margin: 0 auto; }
+.secflydraw .fly-wide { width: 92%; margin: 150px auto 0; }
+
 /* ---- header 2 : finished works ---- */
 .header2 { padding: 80px 110px 160px; }
 .work-nav { display: flex; justify-content: space-between; font-size: 38px; color: #fff; }
