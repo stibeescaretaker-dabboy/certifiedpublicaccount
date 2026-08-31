@@ -30,8 +30,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
               #e79140 61%, #fecc12 69%, #fef100 100%);
 }
 #bg-tile {
-  position: absolute; left: 0; top: 0; width: 24000px; height: 100%; z-index: 1;
-  background: url("../images/tile.jpg") repeat; background-size: 500px 250px;
+  position: absolute; left: 6000px; top: 0; width: 12000px; height: 100%; z-index: 1;
+  background: url("../images/tile.jpg") repeat; background-size: 1000px 500px;
 }
 #floaters { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 6; pointer-events: none; }
 #floaters > * { position: absolute; left: 0; top: 0; will-change: transform; }
