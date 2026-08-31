@@ -28,10 +28,21 @@
     ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
   function apply() { world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')'; }
-  function initialView() { /* start zoomed in on the header 1 text */
-    s = Math.min(Math.max(vw / 2400, MIN_S), 2);
-    tx = vw / 2 - (COL_X + COL_W / 2) * s;
-    ty = vh * 0.38 - (COL_Y + 700) * s;
+  function initialView() { /* start zoomed in on the "Click/tap and drag" text */
+    var el = document.querySelector('.howto');
+    /* measure the words themselves at scale 1 — offsetWidth spans the whole
+       header column, which framed the text off-center and half off-screen */
+    world.style.transform = 'none';
+    var rng = document.createRange();
+    rng.selectNodeContents(el);
+    var b = rng.getBoundingClientRect();
+    var wr = world.getBoundingClientRect();
+    var wx = b.left - wr.left + b.width * 0.5;
+    var wy = b.top - wr.top + b.height * 0.5;
+    /* 3 extra scroll-wheel ticks of zoom: each tick is ~exp(0.16) = 1.174x */
+    s = Math.min(Math.max((vw / (b.width + 700)) * Math.exp(0.16 * 3), MIN_S), 2.5);
+    tx = vw * 0.5 - wx * s;
+    ty = vh * 0.5 - wy * s;
     clamp(); apply();
   }
   function zoomAt(cx, cy, f) {
@@ -46,6 +57,8 @@
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
   var lastTap = 0, lastTapX = 0, lastTapY = 0;
+  /* never let the browser grab images for native drag — always pan instead */
+  window.addEventListener('dragstart', function (e) { e.preventDefault(); });
   window.addEventListener('pointerdown', function (e) {
     if (e.button !== undefined && e.button !== 0) return;
     try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
@@ -215,6 +228,14 @@
   window.addEventListener('load', function () { measure(); clamp(); apply(); });
 
   measure();
+  /* randomize the CGI filmstrip order on every load */
+  var strip = document.querySelector('.filmstrip');
+  if (strip) {
+    var cards = Array.prototype.slice.call(strip.children);
+    while (cards.length) {
+      strip.appendChild(cards.splice(Math.floor(Math.random() * cards.length), 1)[0]);
+    }
+  }
   spawnFloaters();
   initialView();
   requestAnimationFrame(tick);

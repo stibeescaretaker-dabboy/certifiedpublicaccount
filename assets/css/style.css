@@ -31,7 +31,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 #bg-tile {
   position: absolute; left: 6000px; top: 0; width: 12000px; height: 100%; z-index: 1;
-  background: url("../images/tile.jpg") repeat; background-size: 1000px 500px;
+  background: url("../images/tile.jpg") repeat; background-size: 2000px 1000px;
 }
 #floaters { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 6; pointer-events: none; }
 #floaters > * { position: absolute; left: 0; top: 0; will-change: transform; }
@@ -39,7 +39,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 /* ---- central column ---- */
 #column { position: absolute; left: 10000px; top: 6000px; width: 4000px; z-index: 3; }
-.block { width: 100%; background: #000; position: relative; }
+.block { width: 100%; background: #000; position: relative; z-index: 2; }
 
 /* ---- header 1 : name ---- */
 .header-block { padding: 220px 130px 150px; }
@@ -48,10 +48,10 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   font-size: 168px; line-height: 1; color: #fff; font-weight: bold; letter-spacing: 4px;
 }
 .site-name .star { color: #ffe14f; font-style: normal; }
-.wip { position: relative; height: 150px; margin-top: 6px; font-weight: bold; font-size: 120px; line-height: 1; }
+.wip { position: relative; height: 250px; margin-top: 15px; font-weight: bold; font-size: 120px; line-height: 1; }
 .wip span { position: absolute; }
-.wip .b { color: #3aa0ff; }
-.wip .m { color: #ff2fa0; }
+.wip .b { color: #3aa0ff; top: 0; }
+.wip .m { color: #ff2fa0; top: 120px; }
 .howto { margin-top: 130px; color: #fff; font-size: 44px; line-height: 1.7; }
 
 /* ---- dividers ---- */
@@ -60,36 +60,44 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
 }
 .divider-big {
-  position: relative; height: 700px; opacity: .85;
+  position: relative; height: 700px;
   background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
 }
 .arrow-box {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  background: #fff; padding: 26px 58px;
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -42%);
+  background: #fff; padding: 20px 40px;
 }
-.arrow-box img { width: 190px; height: auto; }
+.arrow-box img { width: 150px; height: auto; }
 
 /* ---- section 1 : CGI filmstrip ---- */
-.sec1 .filmstrip { background: #fff; display: flex; justify-content: center; gap: 26px; padding: 34px 0; }
-.filmstrip img { height: 480px; width: auto; }
-.sec1-text { padding: 90px 560px 100px; color: #fff; }
-.sec1-text h2 { font-size: 46px; margin-bottom: 16px; }
-.sec1-text .meta { font-size: 34px; font-weight: bold; margin-bottom: 44px; }
-.sec1-text .body { font-size: 28px; line-height: 1.55; text-align: justify; max-width: 2840px; }
+/* filmstrip is wider than the column and bleeds into the tiled world on both sides */
+.sec1 .filmstrip {
+  background: #fff; display: flex; justify-content: center; gap: 10px; padding: 3px 0;
+  width: max-content; position: relative; left: 50%; transform: translateX(-50%);
+}
+.filmstrip img { height: 1190px; width: auto; }
+.sec1-text { padding: 90px 400px 100px; color: #fff; }
+.sec1-text h2 { font-size: 46px; font-style: italic; display: inline; margin-right: 90px; }
+.sec1-text .meta { font-size: 34px; font-weight: bold; }
+.sec1-text .body { font-size: 28px; line-height: 1.55; text-align: left; max-width: 3200px; margin-top: 44px; }
 
 /* ---- section 2 : poem ---- */
-.sec2 { display: flex; gap: 150px; padding: 170px 200px; }
+.sec2 { display: flex; gap: 150px; padding: 170px 200px; align-items: stretch; }
 .poem-img { width: 1250px; flex: none; height: auto; }
-.poem-text { color: #fff; font-style: italic; font-size: 34px; line-height: 1.5; padding-top: 50px; }
-.poem-text p { margin-bottom: 120px; max-width: 1750px; }
+.poem-text {
+  color: #fff; font-style: italic; font-size: 34px; line-height: 1.5;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.poem-text p { max-width: 1750px; }
 .poem-text .duo { display: flex; gap: 150px; max-width: none; }
 .poem-text .caption { font-style: normal; font-weight: bold; margin-top: 40px; margin-bottom: 0; }
 
 /* ---- sections 3-5 : artwork ---- */
 .sec { padding: 170px 160px; }
 .sec img { width: 100%; height: auto; }
-.sec3 .fish-row { display: flex; gap: 120px; margin: 130px 0; }
+.sec3 .fish-row { display: flex; margin: 130px 0; }
 .sec3 .fish-row img { width: calc(50% - 60px); }
+.sec3 .fish-row img + img { margin-left: -340px; }
 .sec3 .fish-wide { width: 64%; margin: 0 auto; }
 .sec4 img { width: 76%; margin: 0 auto; }
 .sec5 img { width: 92%; margin: 0 auto; }
@@ -99,10 +107,18 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .work-nav { display: flex; justify-content: space-between; font-size: 38px; color: #fff; }
 .work-nav .y { color: #ffe14f; }
 .works-title {
-  display: flex; justify-content: space-between; width: 88%; margin-top: 180px;
+  display: flex; justify-content: space-between; width: 72%; margin-top: 180px;
   font-size: 168px; color: #3aa0ff; font-weight: bold; letter-spacing: 2px;
 }
 .works-years {
-  display: flex; justify-content: space-between; width: 86%; margin-top: 50px;
+  display: flex; justify-content: space-between; width: 76%; margin-top: 15px;
   font-size: 132px; color: #ff2fa0; font-weight: bold;
 }
+.header2 .divider-thin { margin: 70px -110px 0; }
+
+/* ---- artwork captions (sections 3, 4, 5) ---- */
+.art-caption { color: #fff; padding: 120px 160px 140px; }
+.art-caption .cap-head { font-size: 46px; }
+.art-caption .cap-head .cap-title { font-style: italic; font-weight: normal; display: inline; }
+.art-caption .cap-head .cap-meta { font-weight: bold; font-size: 36px; margin-left: 90px; }
+.art-caption .cap-body { font-size: 30px; line-height: 1.55; margin-top: 50px; max-width: 3600px; }
