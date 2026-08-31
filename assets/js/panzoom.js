@@ -21,15 +21,17 @@
     worldH = colH + 12000;
     world.style.height = worldH + 'px';
   }
-  function clamp() { /* keep the column reachable */
-    tx = Math.min(Math.max(tx, 120 - (COL_X + COL_W) * s), vw - 120 - COL_X * s);
-    ty = Math.min(Math.max(ty, 120 - (COL_Y + colH) * s), vh - 120 - COL_Y * s);
+  function clamp() { /* keep the column reachable; bounds may invert when zoomed in */
+    var loX = 120 - (COL_X + COL_W) * s, hiX = vw - 120 - COL_X * s;
+    var loY = 120 - (COL_Y + colH) * s, hiY = vh - 120 - COL_Y * s;
+    tx = Math.min(Math.max(tx, Math.min(loX, hiX)), Math.max(loX, hiX));
+    ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
   function apply() { world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')'; }
-  function initialView() {
-    s = Math.min(Math.max(vw / 4700, MIN_S), 1.2);
+  function initialView() { /* start zoomed in on the header 1 text */
+    s = Math.min(Math.max(vw / 2400, MIN_S), 2);
     tx = vw / 2 - (COL_X + COL_W / 2) * s;
-    ty = vh * 0.45 - (COL_Y + 780) * s;
+    ty = vh * 0.38 - (COL_Y + 700) * s;
     clamp(); apply();
   }
   function zoomAt(cx, cy, f) {
