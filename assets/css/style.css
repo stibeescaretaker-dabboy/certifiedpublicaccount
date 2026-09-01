@@ -73,12 +73,12 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   cursor: pointer;
 }
 
-/* ---- virtual fist cursor (touch devices) ---- */
-#virtual-cursor {
+/* ---- virtual fist cursors (touch devices; one per finger) ---- */
+.virtual-cursor {
   position: fixed;
   left: -200px;
   top: -200px;
-  width: 76px;
+  width: 38px;
   height: auto;
   pointer-events: none;
   z-index: 9999;
@@ -86,8 +86,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   transform: translate(-50%, -50%);
   will-change: opacity;
 }
-#virtual-cursor.show { opacity: 1; transition: opacity 120ms; }
-#virtual-cursor.fade { opacity: 0; transition: opacity 3s ease-out; }
+.virtual-cursor.show { opacity: 1; transition: opacity 120ms; }
+.virtual-cursor.fade { opacity: 0; transition: opacity 3s ease-out; }
 
 /* ---- dividers ---- */
 .divider-thin {

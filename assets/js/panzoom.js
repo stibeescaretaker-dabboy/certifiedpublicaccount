@@ -54,48 +54,63 @@
   }
   function dist(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy) || 1; }
 
-  /* ---- virtual fist cursor (touch) + movement assist (axis lock) ---- */
-  var axisBox = document.getElementById('axis-lock');
-  var axis = null; /* committed per-gesture: 'x', 'y', or null until movement starts */
-  var vcur = document.createElement('img');
-  vcur.id = 'virtual-cursor';
-  vcur.alt = '';
-  vcur.draggable = false;
-  vcur.src = ROOT + 'assets/images/cursor-closed.png';
-  document.body.appendChild(vcur);
-  var vcurTimer = 0;
-  function vcurShow(closed, x, y) {
-    clearTimeout(vcurTimer);
-    vcur.src = ROOT + 'assets/images/' + (closed ? 'cursor-closed.png' : 'cursor-open.png');
-    vcur.style.left = x + 'px';
-    vcur.style.top = y + 'px';
-    vcur.classList.remove('fade');
-    vcur.classList.add('show');
+  /* ---- virtual fist cursors (touch): one closed fist per finger ---- */
+  /* during a pinch each finger gets its own cursor; on release the open fist
+     lingers in place, fading out over 3s, then is removed */
+  var cursors = new Map(); /* pointerId -> { el, timer } */
+  function vcurShow(id, x, y) {
+    var c = cursors.get(id);
+    if (!c) {
+      var el = document.createElement('img');
+      el.className = 'virtual-cursor';
+      el.alt = '';
+      el.draggable = false;
+      el.src = ROOT + 'assets/images/cursor-closed.png';
+      document.body.appendChild(el);
+      c = { el: el, timer: 0 };
+      cursors.set(id, c);
+    }
+    clearTimeout(c.timer);
+    c.el.src = ROOT + 'assets/images/cursor-closed.png';
+    c.el.style.left = x + 'px';
+    c.el.style.top = y + 'px';
+    c.el.classList.remove('fade');
+    c.el.classList.add('show');
   }
-  function vcurRelease(x, y) { /* open fist lingers in place, fading out over 3s */
-    vcurShow(false, x, y);
-    vcurTimer = setTimeout(function () {
-      vcur.classList.remove('show');
-      vcur.classList.add('fade');
-    }, 60);
+  function vcurMove(id, x, y) {
+    var c = cursors.get(id);
+    if (c) { c.el.style.left = x + 'px'; c.el.style.top = y + 'px'; }
+  }
+  function vcurRelease(id, x, y) {
+    var c = cursors.get(id);
+    if (!c) return;
+    c.el.src = ROOT + 'assets/images/cursor-open.png';
+    c.el.style.left = x + 'px';
+    c.el.style.top = y + 'px';
+    c.el.classList.remove('show');
+    c.el.classList.add('fade');
+    c.timer = setTimeout(function () {
+      if (c.el.parentNode) c.el.parentNode.removeChild(c.el);
+      cursors.delete(id);
+    }, 3100);
   }
 
-  /* ---- hue-shifted open-fist cursor for the movement-assist toggle hover ---- */
-  /* CSS cursors can't be filtered, so build a hue-rotated copy on a canvas once */
-  var hueCur = new Image();
-  hueCur.onload = function () {
-    var c = document.createElement('canvas');
-    c.width = hueCur.naturalWidth;
-    c.height = hueCur.naturalHeight;
-    var ctx = c.getContext('2d');
-    if (!ctx) return;
-    ctx.filter = 'hue-rotate(180deg)'; /* 50% around the color wheel */
-    ctx.drawImage(hueCur, 0, 0);
+  /* ---- hand cursors for UI controls (toggles, buttons) ---- */
+  /* convention: add class "hand-ui" to any interactive control — hovering it
+     shows the pointer fist, pressing it shows the click fist. !important keeps
+     child elements (e.g. the checkbox) from falling back to the OS default. */
+  (function () {
+    var base = ROOT + 'assets/images/';
     var st = document.createElement('style');
-    st.textContent = '.assist-toggle { cursor: url(' + c.toDataURL() + ') 15 24, pointer; }';
+    st.textContent =
+      '.hand-ui, .hand-ui * { cursor: url("' + base + 'pointer fist.png") 9 3, pointer !important; }' +
+      '.hand-ui:active, .hand-ui:active * { cursor: url("' + base + 'click fist.png") 9 3, pointer !important; }';
     document.head.appendChild(st);
-  };
-  hueCur.src = ROOT + 'assets/images/cursor-open.png';
+  })();
+
+  /* ---- movement assist (axis lock) ---- */
+  var axisBox = document.getElementById('axis-lock');
+  var axis = null; /* committed per-gesture: 'x', 'y', or null until movement starts */
 
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
@@ -108,7 +123,7 @@
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved = 0; stopTween();
     axis = null;
-    if (e.pointerType === 'touch') vcurShow(true, e.clientX, e.clientY);
+    if (e.pointerType === 'touch') vcurShow(e.pointerId, e.clientX, e.clientY);
     document.body.classList.add('dragging');
     if (pointers.size === 2) {
       var p = Array.from(pointers.values());
@@ -122,7 +137,7 @@
     var dx = e.clientX - p.x, dy = e.clientY - p.y;
     p.x = e.clientX; p.y = e.clientY;
     moved += Math.abs(dx) + Math.abs(dy);
-    if (e.pointerType === 'touch') { vcur.style.left = e.clientX + 'px'; vcur.style.top = e.clientY + 'px'; }
+    if (e.pointerType === 'touch') vcurMove(e.pointerId, e.clientX, e.clientY);
     if (pointers.size === 1) {
       if (axisBox && axisBox.checked) {
         /* commit to one axis on the first meaningful motion of the gesture */
@@ -147,7 +162,10 @@
     if (pointers.size < 2) pinch = null;
     if (pointers.size === 0) {
       document.body.classList.remove('dragging');
-      if (e.pointerType === 'touch') { lastTouchT = Date.now(); vcurRelease(e.clientX, e.clientY); }
+    }
+    /* release whichever finger lifted — its open fist fades in place (works per-finger during a pinch) */
+    if (e.pointerType === 'touch') { lastTouchT = Date.now(); vcurRelease(e.pointerId, e.clientX, e.clientY); }
+    if (pointers.size === 0) {
       if (moved < 8) { /* tap */
         var now = Date.now();
         if (e.pointerType !== 'mouse' && now - lastTap < 320 &&
