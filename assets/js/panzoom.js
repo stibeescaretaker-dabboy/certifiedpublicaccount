@@ -54,6 +54,49 @@
   }
   function dist(a, b) { var dx = a.x - b.x, dy = a.y - b.y; return Math.sqrt(dx * dx + dy * dy) || 1; }
 
+  /* ---- virtual fist cursor (touch) + movement assist (axis lock) ---- */
+  var axisBox = document.getElementById('axis-lock');
+  var axis = null; /* committed per-gesture: 'x', 'y', or null until movement starts */
+  var vcur = document.createElement('img');
+  vcur.id = 'virtual-cursor';
+  vcur.alt = '';
+  vcur.draggable = false;
+  vcur.src = ROOT + 'assets/images/cursor-closed.png';
+  document.body.appendChild(vcur);
+  var vcurTimer = 0;
+  function vcurShow(closed, x, y) {
+    clearTimeout(vcurTimer);
+    vcur.src = ROOT + 'assets/images/' + (closed ? 'cursor-closed.png' : 'cursor-open.png');
+    vcur.style.left = x + 'px';
+    vcur.style.top = y + 'px';
+    vcur.classList.remove('fade');
+    vcur.classList.add('show');
+  }
+  function vcurRelease(x, y) { /* open fist lingers in place, fading out over 3s */
+    vcurShow(false, x, y);
+    vcurTimer = setTimeout(function () {
+      vcur.classList.remove('show');
+      vcur.classList.add('fade');
+    }, 60);
+  }
+
+  /* ---- hue-shifted open-fist cursor for the movement-assist toggle hover ---- */
+  /* CSS cursors can't be filtered, so build a hue-rotated copy on a canvas once */
+  var hueCur = new Image();
+  hueCur.onload = function () {
+    var c = document.createElement('canvas');
+    c.width = hueCur.naturalWidth;
+    c.height = hueCur.naturalHeight;
+    var ctx = c.getContext('2d');
+    if (!ctx) return;
+    ctx.filter = 'hue-rotate(180deg)'; /* 50% around the color wheel */
+    ctx.drawImage(hueCur, 0, 0);
+    var st = document.createElement('style');
+    st.textContent = '.assist-toggle { cursor: url(' + c.toDataURL() + ') 15 24, pointer; }';
+    document.head.appendChild(st);
+  };
+  hueCur.src = ROOT + 'assets/images/cursor-open.png';
+
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
   var lastTap = 0, lastTapX = 0, lastTapY = 0;
@@ -64,6 +107,8 @@
     try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved = 0; stopTween();
+    axis = null;
+    if (e.pointerType === 'touch') vcurShow(true, e.clientX, e.clientY);
     document.body.classList.add('dragging');
     if (pointers.size === 2) {
       var p = Array.from(pointers.values());
@@ -77,7 +122,16 @@
     var dx = e.clientX - p.x, dy = e.clientY - p.y;
     p.x = e.clientX; p.y = e.clientY;
     moved += Math.abs(dx) + Math.abs(dy);
-    if (pointers.size === 1) { tx += dx; ty += dy; clamp(); apply(); }
+    if (e.pointerType === 'touch') { vcur.style.left = e.clientX + 'px'; vcur.style.top = e.clientY + 'px'; }
+    if (pointers.size === 1) {
+      if (axisBox && axisBox.checked) {
+        /* commit to one axis on the first meaningful motion of the gesture */
+        if (!axis && moved > 10) axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'x') dy = 0;
+        else if (axis === 'y') dx = 0;
+      }
+      tx += dx; ty += dy; clamp(); apply();
+    }
     else if (pointers.size === 2 && pinch) {
       var pt = Array.from(pointers.values());
       var d = dist(pt[0], pt[1]);
@@ -93,7 +147,7 @@
     if (pointers.size < 2) pinch = null;
     if (pointers.size === 0) {
       document.body.classList.remove('dragging');
-      if (e.pointerType === 'touch') lastTouchT = Date.now();
+      if (e.pointerType === 'touch') { lastTouchT = Date.now(); vcurRelease(e.clientX, e.clientY); }
       if (moved < 8) { /* tap */
         var now = Date.now();
         if (e.pointerType !== 'mouse' && now - lastTap < 320 &&

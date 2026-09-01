@@ -54,6 +54,41 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .wip .m { color: #ff2fa0; top: 120px; }
 .howto { margin-top: 130px; color: #fff; font-size: 44px; line-height: 1.7; }
 
+/* ---- movement assist toggle ---- */
+.assist-toggle {
+  display: inline-block;
+  margin-left: 14em; /* 4x the original offset */
+  margin-top: 0.4em;
+  color: #fff; /* same size/style as the instruction text */
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.assist-toggle input {
+  transform: scale(1.4);
+  vertical-align: middle;
+  margin-right: 0.5em;
+  accent-color: #fff;
+  cursor: pointer;
+}
+
+/* ---- virtual fist cursor (touch devices) ---- */
+#virtual-cursor {
+  position: fixed;
+  left: -200px;
+  top: -200px;
+  width: 76px;
+  height: auto;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  will-change: opacity;
+}
+#virtual-cursor.show { opacity: 1; transition: opacity 120ms; }
+#virtual-cursor.fade { opacity: 0; transition: opacity 3s ease-out; }
+
 /* ---- dividers ---- */
 .divider-thin {
   height: 36px;
@@ -71,6 +106,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 /* ---- section 1 : CGI filmstrip ---- */
 /* filmstrip is wider than the column and bleeds into the tiled world on both sides */
+.sec1 { padding: 170px 0 0; } /* black above the photos, matching .sec spacing */
 .sec1 .filmstrip {
   background: #fff; display: flex; justify-content: center; gap: 10px; padding: 3px 0;
   width: max-content; position: relative; left: 50%; transform: translateX(-50%);
