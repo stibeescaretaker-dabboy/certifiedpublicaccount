@@ -22,8 +22,9 @@
     world.style.height = worldH + 'px';
   }
   function clamp() { /* keep the column reachable; bounds may invert when zoomed in */
-    var loX = 120 - (COL_X + COL_W) * s, hiX = vw - 120 - COL_X * s;
-    var loY = 120 - (COL_Y + colH) * s, hiY = vh - 120 - COL_Y * s;
+    var keep = 120 * Math.min(1, 0.35 / s); /* deadzone shrinks at high zoom, letting zoom anchor to the cursor at the edges */
+    var loX = keep - (COL_X + COL_W) * s, hiX = vw - keep - COL_X * s;
+    var loY = keep - (COL_Y + colH) * s, hiY = vh - keep - COL_Y * s;
     tx = Math.min(Math.max(tx, Math.min(loX, hiX)), Math.max(loX, hiX));
     ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
@@ -103,8 +104,8 @@
     var base = ROOT + 'assets/images/';
     var st = document.createElement('style');
     st.textContent =
-      '.hand-ui, .hand-ui * { cursor: url("' + base + 'pointer fist.png") 9 3, pointer !important; }' +
-      '.hand-ui:active, .hand-ui:active * { cursor: url("' + base + 'click fist.png") 9 3, pointer !important; }';
+      '.hand-ui, .hand-ui * { cursor: url("' + base + 'pointer fist.png") 12 4, pointer !important; }' +
+      '.hand-ui:active, .hand-ui:active * { cursor: url("' + base + 'click fist.png") 12 4, pointer !important; }';
     document.head.appendChild(st);
   })();
 
