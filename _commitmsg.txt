@@ -1,1 +1,1 @@
-Section 1: doubled all vertical spacing (section padding 170->340 top and 340 bottom, text block 90/100->180/200, filmstrip strip padding 3->6) which also grows the white-background filmstrip area.
+Section 1: text block vertically centered between photos and section end (gap above = gap below = 180px); white filmstrip strip 5px taller.

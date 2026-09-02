@@ -119,13 +119,13 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 /* ---- section 1 : CGI filmstrip ---- */
 /* filmstrip is wider than the column and bleeds into the tiled world on both sides */
-.sec1 { padding: 340px 0 340px; } /* doubled vertical spacing: black above and below */
+.sec1 { padding: 340px 0 20px; } /* bottom slimmed so the text block sits centered between photos and section end */
 .sec1 .filmstrip {
-  background: #fff; display: flex; justify-content: center; gap: 10px; padding: 6px 0;
+  background: #fff; display: flex; justify-content: center; gap: 10px; padding: 8.5px 0; /* +5px total height */
   width: max-content; position: relative; left: 50%; transform: translateX(-50%);
 }
 .filmstrip img { height: 1190px; width: auto; }
-.sec1-text { padding: 180px 400px 200px; color: #fff; } /* doubled from 90/400/100 */
+.sec1-text { padding: 180px 400px 160px; color: #fff; } /* 180 above = 160 text + 20 section below, centered */
 .sec1-text h2 { font-size: calc(52px * var(--fs)); font-style: italic; display: inline; margin-right: 90px; }
 .sec1-text .meta { font-size: calc(38px * var(--fs)); font-weight: bold; }
 .sec1-text .body { font-size: calc(32px * var(--fs)); line-height: 1.55; text-align: left; max-width: 3200px; margin-top: 44px; }
