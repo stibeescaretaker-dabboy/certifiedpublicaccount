@@ -79,7 +79,7 @@
   /* during a pinch each finger gets its own cursor; on release the open fist
      lingers in place, fading out over 3s, then is removed */
   var cursors = new Map(); /* pointerId -> { el, timer } */
-  function vcurShow(id, x, y) {
+  function vcurShow(id, x, y, ui) {
     var c = cursors.get(id);
     if (!c) {
       var el = document.createElement('img');
@@ -88,11 +88,13 @@
       el.draggable = false;
       el.src = ROOT + 'assets/images/cursor-closed.png';
       document.body.appendChild(el);
-      c = { el: el, timer: 0 };
+      c = { el: el, timer: 0, ui: false };
       cursors.set(id, c);
     }
     clearTimeout(c.timer);
-    c.el.src = ROOT + 'assets/images/cursor-closed.png';
+    /* fingers over hand-ui controls (toggles, bio) get the click fist */
+    c.ui = !!ui;
+    c.el.src = ROOT + 'assets/images/' + (c.ui ? 'click%20fist.png' : 'cursor-closed.png');
     c.el.style.left = x + 'px';
     c.el.style.top = y + 'px';
     c.el.classList.remove('fade');
@@ -105,7 +107,8 @@
   function vcurRelease(id, x, y) {
     var c = cursors.get(id);
     if (!c) return;
-    c.el.src = ROOT + 'assets/images/cursor-open.png';
+    /* click fist (over UI controls) fades in place; the grab fist opens first */
+    if (!c.ui) c.el.src = ROOT + 'assets/images/cursor-open.png';
     c.el.style.left = x + 'px';
     c.el.style.top = y + 'px';
     c.el.classList.remove('show');
@@ -141,17 +144,25 @@
     if (normalMode && s < minS()) zoomAt(vw / 2, vh / 2, minS() / s); /* pull in to the fit scale */
     else { clamp(); apply(); }
   });
+  if (normalBox) normalMode = normalBox.checked; /* honor the checked default from the markup */
 
-  /* ---- bio button: fly to the artist statement ---- */
-  var bioBtn = document.getElementById('bio-btn');
-  if (bioBtn) {
-    bioBtn.addEventListener('click', function (e) {
-      if (moved >= 8) return; /* it was a drag, not a tap */
-      e.stopPropagation();
+  /* ---- bio toggle: real checkbox styled like the others; flies to the statement ---- */
+  var bioBox = document.getElementById('bio-box');
+  if (bioBox) {
+    bioBox.addEventListener('change', function () {
+      if (moved >= 8) { bioBox.checked = false; return; } /* it was a drag, not a tap */
       stopTween(); flyTo('#section-4');
+      bioBox.checked = false; /* it's an action, not a state (programmatic set doesn't re-fire change) */
     });
-    bioBtn.addEventListener('dblclick', function (e) { e.stopPropagation(); }); /* keep double-click zoom off the button */
   }
+
+  /* the square button beside "bio" does the same thing as the checkbox */
+  var bioSquare = document.querySelector('.bio-square');
+  if (bioSquare) bioSquare.addEventListener('click', function (e) {
+    e.stopPropagation(); e.preventDefault();
+    if (moved >= 8) return; /* it was a drag, not a tap */
+    stopTween(); flyTo('#section-4');
+  });
 
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
@@ -172,7 +183,10 @@
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved = 0; stopTween();
     axis = null;
-    if (e.pointerType === 'touch') vcurShow(e.pointerId, e.clientX, e.clientY);
+    if (e.pointerType === 'touch') {
+      var ui = !!(e.target.closest && e.target.closest('.hand-ui'));
+      vcurShow(e.pointerId, e.clientX, e.clientY, ui);
+    }
     document.body.classList.add('dragging');
     if (pointers.size >= 2) snapPinch();
   });
