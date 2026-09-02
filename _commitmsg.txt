@@ -1,1 +1,1 @@
-Pink Face caption one more line higher (5px top padding); flydraw + jazz/guts captions one line lower (345px top padding).
+Add "large text" toggle: html.large-text class bumps --fs two sizes (1.46 desktop / 1.77 phone) with no layout changes needed since everything scales off --fs. Cap blurb widths for readability: section-1 body 3200->2200px, art-caption bodies 3600->2400px.

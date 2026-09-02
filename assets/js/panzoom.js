@@ -155,6 +155,12 @@
   });
   if (normalBox) normalMode = normalBox.checked; /* honor the checked default from the markup */
 
+  /* ---- large text: re-render the whole site 2 font sizes bigger ---- */
+  var largeBox = document.getElementById('large-text');
+  if (largeBox) largeBox.addEventListener('change', function () {
+    document.documentElement.classList.toggle('large-text', largeBox.checked);
+  });
+
   /* ---- bio toggle: real checkbox styled like the others; flies to the statement ---- */
   var bioBox = document.getElementById('bio-box');
   if (bioBox) {
