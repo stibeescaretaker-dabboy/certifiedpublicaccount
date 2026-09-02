@@ -1,1 +1,1 @@
-Divider arrows removed from the gradient dividers (widget arrows remain); gradients at 70% opacity. Locked-zoom start view: page top, maxed zoomed out. Yellow * moved from after "COLE" to after the blue "P".
+Gradients to 90% opacity; asterisk forced yellow with !important so the blue WIP span can't tint it.
