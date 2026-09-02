@@ -180,7 +180,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   margin-top: calc(90px * var(--fs)); } /* bold, one line beneath the IMG_0027 text, in the gap between the two texts */
 .baro-line { flex: 1; font-style: italic; font-size: calc(60px * var(--fs)); } /* bumped from 42px */
 .baro-line b { font-style: normal; font-weight: bold; font-size: 1.3em; }
-.baro-meta { flex: none; font-weight: bold; font-size: calc(38px * var(--fs)); }
+.baro-meta { flex: none; font-weight: bold; font-size: calc(38px * var(--fs)); align-self: baseline; } /* baseline-aligned with the IMG_0027 line */
 .secstatement { background: #000; padding: 440px 360px; }
 .secstatement h2 { color: #fff; font-size: calc(82px * var(--fs)); font-weight: bold; margin-bottom: 140px; }
 .secstatement p { color: #fff; font-size: calc(40px * var(--fs)); line-height: 1.6; max-width: 2900px; margin: 0 auto 120px; padding-left: 480px; }

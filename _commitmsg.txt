@@ -1,1 +1,1 @@
-Baro section: vertical title anchored to the image bottom so its start lines up with the IMG_0027 text; all the text moved down 2 lines together.
+Baro section: "LEAD INK OIL..." meta baseline-aligned with the IMG_0027 line.
