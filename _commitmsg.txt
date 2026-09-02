@@ -1,1 +1,1 @@
-Flydraw section: second photo shifted down (150px -> 400px gap above it).
+Statement section: text back to left-aligned (block stays centered).

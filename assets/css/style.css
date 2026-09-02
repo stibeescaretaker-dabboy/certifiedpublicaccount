@@ -180,7 +180,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .baro-meta { flex: none; font-weight: bold; font-size: calc(38px * var(--fs)); align-self: baseline; } /* baseline-aligned with the IMG_0027 line */
 .secstatement { background: #000; padding: 440px 360px; }
 .secstatement h2 { color: #fff; font-size: calc(82px * var(--fs)); font-weight: bold; margin-bottom: 140px; }
-.secstatement p { color: #fff; font-size: calc(40px * var(--fs)); line-height: 1.6; max-width: 2400px; margin: 0 auto 120px; text-align: center; } /* narrowed + centered: was left-shifted 480px off-center */
+.secstatement p { color: #fff; font-size: calc(40px * var(--fs)); line-height: 1.6; max-width: 2400px; margin: 0 auto 120px; text-align: left; } /* block centered, text left-aligned */
 .secstatement p:last-child { margin-bottom: 0; }
 .secflydraw .fly-main { width: 56%; margin: 0 auto; }
 .secflydraw .fly-wide { width: 92%; margin: 400px auto 0; } /* shifted down: was 150px */
