@@ -156,13 +156,56 @@
     });
   }
 
-  /* the square button beside "bio" does the same thing as the checkbox */
-  var bioSquare = document.querySelector('.bio-square');
-  if (bioSquare) bioSquare.addEventListener('click', function (e) {
-    e.stopPropagation(); e.preventDefault();
-    if (moved >= 8) return; /* it was a drag, not a tap */
-    stopTween(); flyTo('#section-4');
-  });
+  /* ---- section nav widget: press to reveal up/down arrows, arrow = snap to
+     prev/next section, press again to hide. Lives on <body> (screen-fixed),
+     NOT inside #world, so position:fixed actually sticks to the viewport. ---- */
+  (function () {
+    var widget = document.createElement('div');
+    widget.className = 'nav-widget';
+    widget.innerHTML =
+      '<button type="button" class="nav-btn nav-up hand-ui" aria-label="previous section"></button>' +
+      '<button type="button" class="nav-btn nav-down hand-ui" aria-label="next section"></button>' +
+      '<button type="button" class="nav-btn nav-toggle hand-ui" aria-label="show or hide section arrows"></button>';
+    document.body.appendChild(widget);
+
+    var toggle = widget.querySelector('.nav-toggle');
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation(); e.preventDefault();
+      if (moved >= 8) return; /* it was a drag, not a tap */
+      widget.classList.toggle('open');
+    });
+
+    function sections() {
+      return Array.prototype.slice.call(document.querySelectorAll('#column > .block'));
+    }
+    function nearestIndex(els) {
+      /* world-y of the viewport center; closest block center wins */
+      var wy = (vh / 2 - ty) / s, best = 0, bestD = Infinity;
+      els.forEach(function (el, i) {
+        var r = worldRectOf(el);
+        var d = Math.abs(r.y + r.h / 2 - wy);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      return best;
+    }
+    function go(dir) {
+      var els = sections();
+      if (!els.length) return;
+      var i = nearestIndex(els) + dir;
+      i = Math.max(0, Math.min(els.length - 1, i));
+      stopTween(); flyTo('#' + (els[i].id || els[i].tagName.toLowerCase()));
+    }
+    widget.querySelector('.nav-up').addEventListener('click', function (e) {
+      e.stopPropagation(); e.preventDefault();
+      if (moved >= 8) return;
+      go(-1);
+    });
+    widget.querySelector('.nav-down').addEventListener('click', function (e) {
+      e.stopPropagation(); e.preventDefault();
+      if (moved >= 8) return;
+      go(1);
+    });
+  })();
 
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
