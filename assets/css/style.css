@@ -109,7 +109,10 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 /* ---- dividers ---- */
 .divider-thin {
   height: 36px;
-  background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
+  /* fade to black at both the top and bottom edges, solid rainbow in the middle */
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.95) 100%),
+    linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
 }
 .divider-big {
   position: relative; height: 700px;

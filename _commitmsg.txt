@@ -1,1 +1,1 @@
-Big dividers: black overlay now spans the whole height — gradual top-to-bottom darkening across the full divider.
+Small dividers: black fade at both top and bottom edges (9px ramp each), solid rainbow across the middle.
