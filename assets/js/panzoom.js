@@ -142,6 +142,17 @@
     else { clamp(); apply(); }
   });
 
+  /* ---- bio button: fly to the artist statement ---- */
+  var bioBtn = document.getElementById('bio-btn');
+  if (bioBtn) {
+    bioBtn.addEventListener('click', function (e) {
+      if (moved >= 8) return; /* it was a drag, not a tap */
+      e.stopPropagation();
+      stopTween(); flyTo('#section-4');
+    });
+    bioBtn.addEventListener('dblclick', function (e) { e.stopPropagation(); }); /* keep double-click zoom off the button */
+  }
+
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
   function snapPinch() { /* snapshot the two most recent fingers; a stale

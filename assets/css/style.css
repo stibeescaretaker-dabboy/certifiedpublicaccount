@@ -45,14 +45,14 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .header-block { padding: 220px 130px 150px; }
 .site-name {
   display: flex; justify-content: space-between;
-  font-size: 168px; line-height: 1; color: #fff; font-weight: bold; letter-spacing: 4px;
+  font-size: 188px; line-height: 1; color: #fff; font-weight: bold; letter-spacing: 4px;
 }
 .site-name .star { color: #ffe14f; font-style: normal; }
-.wip { position: relative; height: 250px; margin-top: 15px; font-weight: bold; font-size: 120px; line-height: 1; }
+.wip { position: relative; height: 280px; margin-top: 15px; font-weight: bold; font-size: 134px; line-height: 1; }
 .wip span { position: absolute; }
 .wip .b { color: #3aa0ff; top: 0; }
-.wip .m { color: #ff2fa0; top: 120px; }
-.howto { margin-top: 130px; color: #fff; font-size: 44px; line-height: 1.7; }
+.wip .m { color: #ff2fa0; top: 134px; }
+.howto { margin-top: 130px; color: #fff; font-size: 50px; line-height: 1.7; }
 
 /* ---- movement assist toggle ---- */
 .assist-toggle {
@@ -66,7 +66,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   -webkit-user-select: none;
 }
 .assist-toggle input {
-  transform: scale(1.4);
+  transform: scale(2.8); /* twice the previous 1.4 */
   vertical-align: middle;
   margin-right: 0.5em;
   accent-color: #fff;
@@ -113,15 +113,15 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 .filmstrip img { height: 1190px; width: auto; }
 .sec1-text { padding: 90px 400px 100px; color: #fff; }
-.sec1-text h2 { font-size: 46px; font-style: italic; display: inline; margin-right: 90px; }
-.sec1-text .meta { font-size: 34px; font-weight: bold; }
-.sec1-text .body { font-size: 28px; line-height: 1.55; text-align: left; max-width: 3200px; margin-top: 44px; }
+.sec1-text h2 { font-size: 52px; font-style: italic; display: inline; margin-right: 90px; }
+.sec1-text .meta { font-size: 38px; font-weight: bold; }
+.sec1-text .body { font-size: 32px; line-height: 1.55; text-align: left; max-width: 3200px; margin-top: 44px; }
 
 /* ---- section 2 : poem ---- */
 .sec2 { display: flex; gap: 150px; padding: 170px 200px; align-items: stretch; }
 .poem-img { width: 1250px; flex: none; height: auto; }
 .poem-text {
-  color: #fff; font-style: italic; font-size: 34px; line-height: 1.5;
+  color: #fff; font-style: italic; font-size: 38px; line-height: 1.5;
   display: flex; flex-direction: column; justify-content: space-between;
 }
 .poem-text p { max-width: 1750px; }
@@ -141,29 +141,29 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 /* ---- sections 3-5 (new) : baro / statement / flydraw ---- */
 .secbaro img { width: 66%; margin: 0 auto; }
 .secstatement { background: #000; padding: 220px 360px; }
-.secstatement h2 { color: #fff; font-size: 74px; font-weight: bold; margin-bottom: 140px; }
-.secstatement p { color: #fff; font-size: 36px; line-height: 1.6; max-width: 2900px; margin: 0 auto 120px; padding-left: 480px; }
+.secstatement h2 { color: #fff; font-size: 82px; font-weight: bold; margin-bottom: 140px; }
+.secstatement p { color: #fff; font-size: 40px; line-height: 1.6; max-width: 2900px; margin: 0 auto 120px; padding-left: 480px; }
 .secstatement p:last-child { margin-bottom: 0; }
 .secflydraw .fly-main { width: 56%; margin: 0 auto; }
 .secflydraw .fly-wide { width: 92%; margin: 150px auto 0; }
 
 /* ---- header 2 : finished works ---- */
 .header2 { padding: 80px 110px 160px; }
-.work-nav { display: flex; justify-content: space-between; font-size: 38px; color: #fff; }
+.work-nav { display: flex; justify-content: space-between; font-size: 42px; color: #fff; }
 .work-nav .y { color: #ffe14f; }
 .works-title {
   display: flex; justify-content: space-between; width: 72%; margin-top: 180px;
-  font-size: 168px; color: #3aa0ff; font-weight: bold; letter-spacing: 2px;
+  font-size: 188px; color: #3aa0ff; font-weight: bold; letter-spacing: 2px;
 }
 .works-years {
   display: flex; justify-content: space-between; width: 76%; margin-top: 15px;
-  font-size: 132px; color: #ff2fa0; font-weight: bold;
+  font-size: 148px; color: #ff2fa0; font-weight: bold;
 }
 .header2 .divider-thin { margin: 70px -110px 0; }
 
 /* ---- artwork captions (sections 3, 4, 5) ---- */
 .art-caption { color: #fff; padding: 120px 160px 140px; }
-.art-caption .cap-head { font-size: 46px; }
+.art-caption .cap-head { font-size: 52px; }
 .art-caption .cap-head .cap-title { font-style: italic; font-weight: normal; display: inline; }
-.art-caption .cap-head .cap-meta { font-weight: bold; font-size: 36px; margin-left: 90px; }
-.art-caption .cap-body { font-size: 30px; line-height: 1.55; margin-top: 50px; max-width: 3600px; }
+.art-caption .cap-head .cap-meta { font-weight: bold; font-size: 40px; margin-left: 90px; }
+.art-caption .cap-body { font-size: 34px; line-height: 1.55; margin-top: 50px; max-width: 3600px; }
