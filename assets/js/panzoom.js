@@ -15,16 +15,36 @@
   var colH = 24000, worldH = 60000;
   var tx = 0, ty = 0, s = 1;
   var lastTouchT = 0;
+  var normalMode = false; /* normal mode: zoom locked so only the black column shows */
+
+  /* ---- pin the document to the top ---- */
+  /* the world is 60000px tall; mobile browsers scroll that document natively
+     (rubber-band etc.) and restore the old offset on reload, landing mid-page.
+     The app never scrolls natively, so any scroll offset is unwanted. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  window.addEventListener('scroll', function () {
+    if (window.scrollY || window.scrollX) window.scrollTo(0, 0);
+  });
 
   function measure() {
     colH = column.offsetHeight;
     worldH = colH + 12000;
     world.style.height = worldH + 'px';
   }
+  function minS() { /* normal mode never zooms out past the column covering the screen */
+    return normalMode ? Math.max(vw / COL_W, vh / colH) : MIN_S;
+  }
   function clamp() { /* keep the column reachable; bounds may invert when zoomed in */
     var keep = 120 * Math.min(1, 0.35 / s); /* deadzone shrinks at high zoom, letting zoom anchor to the cursor at the edges */
     var loX = keep - (COL_X + COL_W) * s, hiX = vw - keep - COL_X * s;
     var loY = keep - (COL_Y + colH) * s, hiY = vh - keep - COL_Y * s;
+    if (normalMode) { /* lock the view to the black column: its edges may never enter the viewport */
+      loX = Math.max(loX, vw - (COL_X + COL_W) * s);
+      hiX = Math.min(hiX, -COL_X * s);
+      loY = Math.max(loY, vh - (COL_Y + colH) * s);
+      hiY = Math.min(hiY, -COL_Y * s);
+    }
     tx = Math.min(Math.max(tx, Math.min(loX, hiX)), Math.max(loX, hiX));
     ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
@@ -47,7 +67,7 @@
     clamp(); apply();
   }
   function zoomAt(cx, cy, f) {
-    var ns = Math.min(MAX_S, Math.max(MIN_S, s * f));
+    var ns = Math.min(MAX_S, Math.max(minS(), s * f));
     if (ns === s) return;
     tx = cx - (cx - tx) * (ns / s);
     ty = cy - (cy - ty) * (ns / s);
@@ -113,8 +133,25 @@
   var axisBox = document.getElementById('axis-lock');
   var axis = null; /* committed per-gesture: 'x', 'y', or null until movement starts */
 
+  /* ---- normal mode: lock zoom so only the black column is visible ---- */
+  var normalBox = document.getElementById('normal-mode');
+  if (normalBox) normalBox.addEventListener('change', function () {
+    normalMode = normalBox.checked;
+    stopTween();
+    if (normalMode && s < minS()) zoomAt(vw / 2, vh / 2, minS() / s); /* pull in to the fit scale */
+    else { clamp(); apply(); }
+  });
+
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
+  function snapPinch() { /* snapshot the two most recent fingers; a stale
+     snapshot after fingers change caused sudden zoom jumps on phones */
+    if (pointers.size >= 2) {
+      var p = Array.from(pointers.values()).slice(-2);
+      var pd = Math.max(dist(p[0], p[1]), 24); /* floor stops blow-ups when fingers land close together */
+      pinch = { d0: pd, ld: pd };
+    } else pinch = null;
+  }
   var lastTap = 0, lastTapX = 0, lastTapY = 0;
   /* never let the browser grab images for native drag — always pan instead */
   window.addEventListener('dragstart', function (e) { e.preventDefault(); });
@@ -126,11 +163,7 @@
     axis = null;
     if (e.pointerType === 'touch') vcurShow(e.pointerId, e.clientX, e.clientY);
     document.body.classList.add('dragging');
-    if (pointers.size === 2) {
-      var p = Array.from(pointers.values());
-      pinch = { d: dist(p[0], p[1]), s0: s, tx0: tx, ty0: ty,
-                mx: (p[0].x + p[1].x) / 2, my: (p[0].y + p[1].y) / 2 };
-    }
+    if (pointers.size >= 2) snapPinch();
   });
   window.addEventListener('pointermove', function (e) {
     var p = pointers.get(e.pointerId);
@@ -148,19 +181,23 @@
       }
       tx += dx; ty += dy; clamp(); apply();
     }
-    else if (pointers.size === 2 && pinch) {
+    else if (pointers.size >= 2 && pinch) {
+      /* incremental pinch: zoom anchored at the current midpoint, capped
+         per-event so one glitchy reading can't fling the zoom */
       var pt = Array.from(pointers.values());
       var d = dist(pt[0], pt[1]);
       var mx = (pt[0].x + pt[1].x) / 2, my = (pt[0].y + pt[1].y) / 2;
-      var ns = Math.min(MAX_S, Math.max(MIN_S, pinch.s0 * d / pinch.d));
-      var wx = (pinch.mx - pinch.tx0) / pinch.s0, wy = (pinch.my - pinch.ty0) / pinch.s0;
+      var f = Math.max(0.5, Math.min(2, d / (pinch.ld || d)));
+      pinch.ld = d;
+      var ns = Math.min(MAX_S, Math.max(minS(), s * f));
+      var wx = (mx - tx) / s, wy = (my - ty) / s;
       s = ns; tx = mx - wx * ns; ty = my - wy * ns; clamp(); apply();
     }
   });
   function endPointer(e) {
     if (!pointers.has(e.pointerId)) return;
     pointers.delete(e.pointerId);
-    if (pointers.size < 2) pinch = null;
+    snapPinch();
     if (pointers.size === 0) {
       document.body.classList.remove('dragging');
     }
@@ -221,7 +258,7 @@
     var el = document.querySelector(sel);
     if (!el) return;
     var r = worldRectOf(el);
-    var ns = Math.min(MAX_S, Math.max(MIN_S, Math.min(vw * 0.85 / r.w, vh * 0.85 / r.h)));
+    var ns = Math.min(MAX_S, Math.max(minS(), Math.min(vw * 0.85 / r.w, vh * 0.85 / r.h)));
     tween(vw / 2 - (r.x + r.w / 2) * ns, vh / 2 - (r.y + r.h / 2) * ns, ns, 750);
   }
   function tween(fx, fy, fs, ms) {
