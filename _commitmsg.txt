@@ -1,1 +1,1 @@
-Fish section: fish 2-4 row pushed down (top gap 130px -> 400px).
+Art captions (jazz/guts/flydraw sections): equal 260px top/bottom padding so the text centers vertically in its black gap.
