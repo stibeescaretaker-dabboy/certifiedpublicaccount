@@ -195,16 +195,24 @@
       i = Math.max(0, Math.min(els.length - 1, i));
       stopTween(); flyTo('#' + (els[i].id || els[i].tagName.toLowerCase()));
     }
-    widget.querySelector('.nav-up').addEventListener('click', function (e) {
-      e.stopPropagation(); e.preventDefault();
-      if (moved >= 8) return;
-      go(-1);
-    });
-    widget.querySelector('.nav-down').addEventListener('click', function (e) {
-      e.stopPropagation(); e.preventDefault();
-      if (moved >= 8) return;
-      go(1);
-    });
+    /* hold-to-repeat: pressing an arrow hops one section every 0.75s until release */
+    function holdRepeat(btn, dir) {
+      var timer = null;
+      function start(e) {
+        e.stopPropagation(); e.preventDefault();
+        go(dir); /* first hop right away, then every 0.75s while held */
+        timer = setInterval(function () { go(dir); }, 750);
+      }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      btn.addEventListener('pointerdown', start);
+      btn.addEventListener('pointerup', stop);
+      btn.addEventListener('pointerleave', stop);
+      btn.addEventListener('pointercancel', stop);
+      /* touch devices: keep the press from also firing a click/scroll */
+      btn.addEventListener('click', function (e) { e.stopPropagation(); e.preventDefault(); });
+    }
+    holdRepeat(widget.querySelector('.nav-up'), -1);
+    holdRepeat(widget.querySelector('.nav-down'), 1);
   })();
 
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */

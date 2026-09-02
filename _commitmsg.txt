@@ -1,1 +1,1 @@
-Nav widget art trimmed: no border/background, halved to 45px (32px on phones) and flush against the right edge on phones. Email address moved onto the same line as bio, right beside it.
+Nav arrows hold-to-repeat: pressing up/down hops one section immediately and then every 0.75s while held, stopping on release.

@@ -76,12 +76,15 @@ var window = {
 var sandbox = {
   document: document, window: window, Map: Map, Array: Array, Math: Math, Date: Date,
   setTimeout: function (f) { return 0; }, clearTimeout: function () {},
+  setInterval: function () { return 0; }, clearInterval: function () {},
   performance: { now: function () { return Date.now(); } },
   requestAnimationFrame: function (f) { rafQ.push(f); return rafQ.length; },
   history: {}
 };
 sandbox.window.setTimeout = sandbox.setTimeout;
 sandbox.window.clearTimeout = sandbox.clearTimeout;
+sandbox.window.setInterval = sandbox.setInterval;
+sandbox.window.clearInterval = sandbox.clearInterval;
 sandbox.window.requestAnimationFrame = sandbox.requestAnimationFrame;
 vm.createContext(sandbox);
 vm.runInContext(fs.readFileSync('assets/js/panzoom.js', 'utf8'), sandbox);
@@ -132,10 +135,11 @@ var navDown = navWidget.querySelector('.nav-down');
 navToggle.handlers.click({ stopPropagation: function () {}, preventDefault: function () {} });
 check('nav toggle press shows the arrows', navWidget.classList.contains('open'));
 worldEl.style.transform = '';
-navDown.handlers.click({ stopPropagation: function () {}, preventDefault: function () {} });
+navDown.handlers.pointerdown({ stopPropagation: function () {}, preventDefault: function () {} });
 var t = 0; var n2 = 0; while (rafQ.length && n2++ < 30) { t += 50; rafQ.shift()(Date.now() + t); }
-check('nav down arrow started a fly-to tween',
+check('nav down arrow press started a fly-to tween',
   /translate\(/.test(worldEl.style.transform || ''));
+navDown.handlers.pointerup({});
 navToggle.handlers.click({ stopPropagation: function () {}, preventDefault: function () {} });
 check('nav toggle press again hides the arrows', !navWidget.classList.contains('open'));
 
