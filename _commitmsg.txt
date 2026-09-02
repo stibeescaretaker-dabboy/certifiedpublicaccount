@@ -1,1 +1,1 @@
-Revert all divider gradient experiments (thin + big back to plain full-strength rainbow). Fish section: fish-2/3/4 in one smaller row, edges touching (fish-4 pulled out of its own wide row).
+Fish row images halved: 38% -> 19% width each.

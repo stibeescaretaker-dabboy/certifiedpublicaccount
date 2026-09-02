@@ -150,7 +150,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .sec { padding: 340px 160px; }
 .sec img { width: 100%; height: auto; }
 .sec3 .fish-row { display: flex; justify-content: center; align-items: flex-end; margin: 130px 0; gap: 0; }
-.sec3 .fish-row img { width: 38%; }   /* smaller, edges touching (no gap, no overlap) */
+.sec3 .fish-row img { width: 19%; }   /* 50% of the previous 38%, edges touching */
 .sec3 .fish-wide { width: 64%; margin: 0 auto; }
 .sec4 img { width: 76%; margin: 0 auto; }
 .sec5 img { width: 92%; margin: 0 auto; }
