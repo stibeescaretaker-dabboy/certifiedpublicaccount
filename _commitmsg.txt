@@ -1,1 +1,1 @@
-Gradients to 90% opacity; asterisk forced yellow with !important so the blue WIP span can't tint it.
+Divider gradients: 100% opacity at each bar's own top fading to 50% at its bottom via a vertical mask (replaces flat opacity).
