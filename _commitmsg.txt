@@ -1,1 +1,1 @@
-Hide large-text toggle (code stays in place). Center-position the text blocks: section-1 blurb, all art captions (cap-head + cap-body), statement heading.
+Undo all blurb width caps and center-positioning experiments; back to original text layout. Large-text code remains but hidden.
