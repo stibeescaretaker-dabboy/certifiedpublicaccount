@@ -1,1 +1,1 @@
-Art captions (jazz/guts/flydraw sections): equal 260px top/bottom padding so the text centers vertically in its black gap.
+Fish section: "Pink Face" caption raised 2 lines (90px top padding), shortening the section.
