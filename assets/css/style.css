@@ -131,7 +131,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .sec1-text .body { font-size: calc(32px * var(--fs)); line-height: 1.55; text-align: left; max-width: 3200px; margin-top: 44px; }
 
 /* ---- section 2 : poem ---- */
-.sec2 { display: flex; gap: 150px; padding: 170px 200px; align-items: stretch; }
+.sec2 { display: flex; gap: 150px; padding: 340px 200px; align-items: stretch; }
 .poem-img { width: 1250px; flex: none; height: auto; }
 .poem-text {
   color: #fff; font-style: italic; font-size: calc(38px * var(--fs)); line-height: 1.5;
@@ -149,7 +149,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .poem-text .caption { font-style: normal; font-weight: bold; margin-top: 40px; margin-bottom: 0; }
 
 /* ---- sections 3-5 : artwork ---- */
-.sec { padding: 170px 160px; }
+.sec { padding: 340px 160px; }
 .sec img { width: 100%; height: auto; }
 .sec3 .fish-row { display: flex; margin: 130px 0; }
 .sec3 .fish-row img { width: calc(50% - 60px); }
@@ -161,7 +161,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 /* ---- section 3 : barotrauma (mockup layout) ---- */
 /* vertical italic title beside the image; caption line runs below with the
    oversized "7", the "&" under the vertical text, medium info right-aligned */
-.secbaro { padding: 170px 160px 140px; }
+.secbaro { padding: 340px 160px 280px; }
 .baro-row { display: flex; gap: 120px; align-items: center; }
 .baro-vert {
   flex: none; width: max-content; white-space: nowrap; /* ONE vertical line, no wrapping */
@@ -177,7 +177,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .baro-line { flex: 1; font-style: italic; font-size: calc(42px * var(--fs)); }
 .baro-line b { font-style: normal; font-weight: bold; font-size: 1.3em; }
 .baro-meta { flex: none; font-weight: bold; font-size: calc(38px * var(--fs)); }
-.secstatement { background: #000; padding: 220px 360px; }
+.secstatement { background: #000; padding: 440px 360px; }
 .secstatement h2 { color: #fff; font-size: calc(82px * var(--fs)); font-weight: bold; margin-bottom: 140px; }
 .secstatement p { color: #fff; font-size: calc(40px * var(--fs)); line-height: 1.6; max-width: 2900px; margin: 0 auto 120px; padding-left: 480px; }
 .secstatement p:last-child { margin-bottom: 0; }
@@ -199,7 +199,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .header2 .divider-thin { margin: 70px -110px 0; }
 
 /* ---- artwork captions (sections 3, 4, 5) ---- */
-.art-caption { color: #fff; padding: 120px 160px 140px; }
+.art-caption { color: #fff; padding: 240px 160px 280px; }
 .art-caption .cap-head { font-size: calc(52px * var(--fs)); }
 .art-caption .cap-head .cap-title { font-style: italic; font-weight: normal; display: inline; }
 .art-caption .cap-head .cap-meta { font-weight: bold; font-size: calc(40px * var(--fs)); margin-left: 90px; }

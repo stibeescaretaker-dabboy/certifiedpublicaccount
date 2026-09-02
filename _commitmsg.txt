@@ -1,1 +1,1 @@
-Section 1: text block vertically centered between photos and section end (gap above = gap below = 180px); white filmstrip strip 5px taller.
+Section 1 blurb replaced with new text. Same black-space padding doubling applied to every other section (sec2, sec3-5/baro/statement, art captions); poem inter-stanza spacing untouched.
