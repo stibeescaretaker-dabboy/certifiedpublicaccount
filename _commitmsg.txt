@@ -1,1 +1,1 @@
-Section 1 blurb replaced with new text. Same black-space padding doubling applied to every other section (sec2, sec3-5/baro/statement, art captions); poem inter-stanza spacing untouched.
+Baro section: vertical title 44->64px and IMG_0027 line 42->60px (amp scaled to match); bold "B" in "Barotrauma".
