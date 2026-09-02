@@ -1,1 +1,1 @@
-Add "large text" toggle: html.large-text class bumps --fs two sizes (1.46 desktop / 1.77 phone) with no layout changes needed since everything scales off --fs. Cap blurb widths for readability: section-1 body 3200->2200px, art-caption bodies 3600->2400px.
+Blurb width caps widened: section-1 body 2200->2600px, art-caption bodies 2400->2800px.
