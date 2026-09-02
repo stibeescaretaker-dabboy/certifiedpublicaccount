@@ -1,1 +1,1 @@
-Fish row images halved: 38% -> 19% width each.
+Statement section: main text centered horizontally (480px left offset removed, narrower 2400px column, centered text).
