@@ -1,1 +1,1 @@
-Cache-bust CSS/JS URLs with the build timestamp so phones pick up new styles without manual cache clears.
+Hide large-text toggle (code stays in place). Center-position the text blocks: section-1 blurb, all art captions (cap-head + cap-body), statement heading.
