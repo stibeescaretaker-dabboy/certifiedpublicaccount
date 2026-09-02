@@ -165,13 +165,15 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .baro-row { display: flex; gap: 120px; align-items: center; }
 .baro-vert {
   flex: none; width: max-content; white-space: nowrap; /* ONE vertical line, no wrapping */
+  align-self: flex-end; /* start (bottom end) of the vertical text lines up with the IMG_0027 row below */
+  margin-bottom: calc(-180px * var(--fs)); /* whole text block sits 2 lines lower, in step with baro-bottom */
   color: #fff; font-style: italic; font-size: calc(64px * var(--fs)); /* bumped from 44px: title read small */
   writing-mode: vertical-rl; transform: rotate(180deg); /* reads bottom-to-top */
 }
 .baro-row img { flex: 1; min-width: 0; height: auto; }
 .baro-bottom {
   display: flex; align-items: flex-start; gap: 60px;
-  margin-top: 0; /* pulls the IMG_0027 line up level with the vertical title's start (its bottom end) */
+  margin-top: calc(180px * var(--fs)); /* 2 lines below the image row, level with the vertical title's start */
   color: #fff;
 }
 .baro-amp { flex: none; width: 90px; text-align: center; font-size: calc(64px * var(--fs)); font-weight: bold;
