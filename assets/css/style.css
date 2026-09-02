@@ -183,7 +183,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .secstatement p { color: #fff; font-size: calc(40px * var(--fs)); line-height: 1.6; max-width: 2400px; margin: 0 auto 120px; text-align: center; } /* narrowed + centered: was left-shifted 480px off-center */
 .secstatement p:last-child { margin-bottom: 0; }
 .secflydraw .fly-main { width: 56%; margin: 0 auto; }
-.secflydraw .fly-wide { width: 92%; margin: 150px auto 0; }
+.secflydraw .fly-wide { width: 92%; margin: 400px auto 0; } /* shifted down: was 150px */
 
 /* ---- header 2 : finished works ---- */
 .header2 { padding: 80px 110px 160px; }

@@ -1,1 +1,1 @@
-Statement section: main text centered horizontally (480px left offset removed, narrower 2400px column, centered text).
+Flydraw section: second photo shifted down (150px -> 400px gap above it).
