@@ -1,1 +1,1 @@
-Small dividers: black fade at both top and bottom edges (9px ramp each), solid rainbow across the middle.
+Small dividers: solid-rainbow middle thinned to 20% (fades now span 40% from each edge).
