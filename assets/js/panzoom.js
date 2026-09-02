@@ -49,7 +49,16 @@
     ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
   function apply() { world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')'; }
-  function initialView() { /* start zoomed in on the "Click/tap and drag" text */
+  function initialView() {
+    if (normalMode) {
+      /* locked zoom on: start maxed zoomed out, column top flush with the top of the page */
+      s = minS();
+      tx = vw * 0.5 - (COL_X + COL_W * 0.5) * s;   /* column centered horizontally */
+      ty = -COL_Y * s;                              /* column top at the viewport top */
+      clamp(); apply();
+      return;
+    }
+    /* free mode: start zoomed in on the "Click/tap and drag" text */
     var el = document.querySelector('.howto');
     /* measure the words themselves at scale 1 — offsetWidth spans the whole
        header column, which framed the text off-center and half off-screen */
