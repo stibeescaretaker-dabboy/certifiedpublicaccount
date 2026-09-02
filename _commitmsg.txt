@@ -1,1 +1,1 @@
-Statement section: text back to left-aligned (block stays centered).
+Fish section: fish 2-4 row pushed down (top gap 130px -> 400px).
