@@ -1,1 +1,1 @@
-Nav widget wired to real art: widget/up_base/down_base images with _click swap while pressed (action still fires on release). Widget and header toggles moved 1.5x further right; extra square button beside "bio" removed; blue art@tian-studio.com added beside bio in the toggle style.
+Nav widget art trimmed: no border/background, halved to 45px (32px on phones) and flush against the right edge on phones. Email address moved onto the same line as bio, right beside it.
