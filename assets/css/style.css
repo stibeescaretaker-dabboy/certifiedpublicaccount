@@ -201,7 +201,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 /* ---- artwork captions (sections 3, 4, 5) ---- */
 .art-caption { color: #fff; padding: 260px 160px; } /* equal top/bottom: text centered vertically in the black gap */
-.sec3 .art-caption { padding-top: 90px; } /* Pink Face caption 2 lines higher; also shortens the section */
+.sec3 .art-caption { padding-top: 5px; } /* Pink Face caption 3 lines total higher; shortens the section */
+.secflydraw .art-caption, .sec4 .art-caption, .sec5 .art-caption { padding-top: 345px; } /* flydraw + jazz/guts captions one line lower */
 .art-caption .cap-head { font-size: calc(52px * var(--fs)); }
 .art-caption .cap-head .cap-title { font-style: italic; font-weight: normal; display: inline; }
 .art-caption .cap-head .cap-meta { font-weight: bold; font-size: calc(40px * var(--fs)); margin-left: 90px; }

@@ -1,1 +1,1 @@
-Fish section: "Pink Face" caption raised 2 lines (90px top padding), shortening the section.
+Pink Face caption one more line higher (5px top padding); flydraw + jazz/guts captions one line lower (345px top padding).
