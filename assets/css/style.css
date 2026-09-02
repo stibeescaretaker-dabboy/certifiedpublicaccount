@@ -113,9 +113,10 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 .divider-big {
   position: relative; height: 700px;
-  background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 50%, rgba(0,0,0,0.1) 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 50%, rgba(0,0,0,0.1) 100%); /* full color for the 1st half, then slowly fading to black through the 2nd half */
+  /* 1st half = pure rainbow, 2nd half = the same rainbow gradually overlaid with black */
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.95) 100%),
+    linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
 }
 /* ---- section 1 : CGI filmstrip ---- */
 /* filmstrip is wider than the column and bleeds into the tiled world on both sides */

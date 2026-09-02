@@ -1,1 +1,1 @@
-Big dividers: full-strength 1st half, then slowly fade to black through the 2nd half (mask hold-then-fade).
+Big dividers: replaced the transparent mask (which let the world show through) with a stacked black overlay gradient — 1st half pure rainbow, 2nd half gradually turning black, fully opaque throughout.
