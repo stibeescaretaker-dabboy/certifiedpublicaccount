@@ -114,8 +114,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .divider-big {
   position: relative; height: 700px;
   background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.9) 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.9) 100%); /* 100% opacity at the bar's top fading to 90% at its bottom */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.95) 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.95) 100%); /* 100% opacity at the bar's top fading to 95% at its bottom */
 }
 /* ---- section 1 : CGI filmstrip ---- */
 /* filmstrip is wider than the column and bleeds into the tiled world on both sides */

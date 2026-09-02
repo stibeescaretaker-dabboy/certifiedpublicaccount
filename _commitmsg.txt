@@ -1,1 +1,1 @@
-Divider gradients: big dividers fade 100% at top to 90% at bottom; small dividers back to plain 100%.
+Big divider bottom opacity 90% -> 95%.
