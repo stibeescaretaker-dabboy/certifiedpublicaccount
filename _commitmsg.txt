@@ -1,1 +1,1 @@
-Big dividers: replaced the transparent mask (which let the world show through) with a stacked black overlay gradient — 1st half pure rainbow, 2nd half gradually turning black, fully opaque throughout.
+Big dividers: black overlay now spans the whole height — gradual top-to-bottom darkening across the full divider.
