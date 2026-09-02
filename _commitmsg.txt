@@ -1,1 +1,1 @@
-Blurb width caps widened: section-1 body 2200->2600px, art-caption bodies 2400->2800px.
+Statement width cap 2400->2800px. Large text now 4 sizes up (1.77 desktop / 2.14 phone) with overlap guards: WIP line rows, "&" column and header gap scale with --fs.
