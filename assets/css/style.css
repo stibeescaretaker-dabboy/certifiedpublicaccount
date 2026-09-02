@@ -170,10 +170,12 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 .baro-row img { flex: 1; min-width: 0; height: auto; }
 .baro-bottom {
-  display: flex; align-items: baseline; gap: 60px;
-  margin-top: 100px; color: #fff;
+  display: flex; align-items: flex-start; gap: 60px;
+  margin-top: 0; /* pulls the IMG_0027 line up level with the vertical title's start (its bottom end) */
+  color: #fff;
 }
-.baro-amp { flex: none; width: 90px; text-align: center; font-size: calc(64px * var(--fs)); } /* matches the vertical title */
+.baro-amp { flex: none; width: 90px; text-align: center; font-size: calc(64px * var(--fs)); font-weight: bold;
+  margin-top: calc(90px * var(--fs)); } /* bold, one line beneath the IMG_0027 text, in the gap between the two texts */
 .baro-line { flex: 1; font-style: italic; font-size: calc(60px * var(--fs)); } /* bumped from 42px */
 .baro-line b { font-style: normal; font-weight: bold; font-size: 1.3em; }
 .baro-meta { flex: none; font-weight: bold; font-size: calc(38px * var(--fs)); }

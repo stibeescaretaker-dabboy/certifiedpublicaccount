@@ -1,1 +1,1 @@
-Baro section: vertical title 44->64px and IMG_0027 line 42->60px (amp scaled to match); bold "B" in "Barotrauma".
+Baro section: "&" bold and one line beneath the IMG_0027 text (in the gap between the two texts); IMG_0027 line raised to sit level with the vertical title's start.
