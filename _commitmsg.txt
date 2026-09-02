@@ -1,1 +1,1 @@
-Phone: a couple of extra lines of space between the 2026 WIP line and the instructions.
+Poem section 2 spacing: desktop nudges stanza 1 down 3 lines and stanza 2 down 4 (rest in place); phone moves all 4 stanzas down 2 lines; "I the ripple".."I the chemistry" column now starts 4 lines lower so it lines up with "you the pebble".."you sweat".
