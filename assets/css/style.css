@@ -223,4 +223,5 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 @media (max-width: 820px) {
   .nav-btn { width: 32px; height: 32px; } /* 50% of the previous 64px */
   .nav-widget { right: 0; }               /* flush against the right edge on phones */
+  .howto { margin-top: 380px; }           /* a couple of extra lines of space after the 2026 line on phones */
 }
