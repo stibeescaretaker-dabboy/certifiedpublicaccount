@@ -1,1 +1,1 @@
-Reading mode control restyled as a toggle (small square + "read" label, like the other controls), screen-fixed so it never moves while panning, scoped to section 1; checkbox opens/closes the black reading overlay.
+Reading mode: each section now has its own small "read" toggle (styled exactly like the assist toggles) placed inside the section, so it travels with the world. Checking opens a black overlay with just that section's text re-flowed for comfortable reading.

@@ -230,18 +230,11 @@
     holdRepeat(widget.querySelector('.nav-down'), 1);
   })();
 
-  /* ---- EXPERIMENTAL: reading mode. A screen-fixed control styled like the
-     other toggles (small square + label) opens a black overlay with the
-     section's text re-flowed for comfortable reading. Currently section 1. ---- */
+  /* ---- EXPERIMENTAL: reading mode. Every section carries a small "read"
+     toggle (checkbox + label, styled like the assist-toggles). Checking it
+     opens a black overlay with that section's text re-flowed for reading.
+     The toggle lives inside its section, so it travels with it while pan/zoom. ---- */
   (function () {
-    var label = document.createElement('label');
-    label.className = 'read-toggle hand-ui';
-    var box = document.createElement('input');
-    box.type = 'checkbox';
-    label.appendChild(box);
-    label.appendChild(document.createTextNode('read'));
-    document.body.appendChild(label);
-
     var overlay = document.createElement('div');
     overlay.className = 'read-overlay';
     var close = document.createElement('button');
@@ -254,24 +247,37 @@
     overlay.appendChild(page);
     document.body.appendChild(overlay);
 
-    var loaded = false;
-    function open() {
-      if (!loaded) { /* pull the live text once so it stays in sync with the page */
-        var src = document.querySelector('#section-1 .sec1-text');
-        if (src) page.innerHTML = src.innerHTML;
-        loaded = true;
-      }
+    var activeBox = null;
+
+    function build(section) {
+      /* clone the section and strip non-text leaves so only readable text remains */
+      var clone = section.cloneNode(true);
+      Array.prototype.forEach.call(clone.querySelectorAll('img, video, audio, .read-toggle'), function (el) {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      });
+      page.innerHTML = '';
+      page.appendChild(clone);
+    }
+    function open(section, box) {
+      if (activeBox && activeBox !== box) activeBox.checked = false; /* one read view at a time */
+      activeBox = box;
+      build(section);
       overlay.classList.add('open');
     }
-    function closeAll() { overlay.classList.remove('open'); box.checked = false; }
+    function closeAll() { overlay.classList.remove('open'); if (activeBox) activeBox.checked = false; activeBox = null; }
 
-    box.addEventListener('change', function (e) {
-      e.stopPropagation();
-      if (box.checked) open(); else closeAll();
+    Array.prototype.forEach.call(document.querySelectorAll('#column .read-toggle'), function (label) {
+      var box = label.querySelector('input');
+      if (!box) return;
+      box.addEventListener('change', function (e) {
+        e.stopPropagation();
+        var section = label.closest ? label.closest('.block') : null;
+        if (box.checked) {
+          if (section) open(section, box); else box.checked = false;
+        } else closeAll();
+      });
     });
-    close.addEventListener('click', function (e) {
-      e.stopPropagation(); e.preventDefault(); closeAll();
-    });
+    close.addEventListener('click', function (e) { e.stopPropagation(); e.preventDefault(); closeAll(); });
   })();
 
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
