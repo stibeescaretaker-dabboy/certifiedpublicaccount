@@ -292,7 +292,7 @@
       var imgBox = document.createElement('input');
       imgBox.type = 'checkbox';
       imgLabel.appendChild(imgBox);
-      imgLabel.appendChild(document.createTextNode('IMG.'));
+      imgLabel.appendChild(document.createTextNode('img'));
       label.parentNode.insertBefore(imgLabel, label.nextSibling); /* to the right of "read" */
 
       box.addEventListener('change', function (e) {

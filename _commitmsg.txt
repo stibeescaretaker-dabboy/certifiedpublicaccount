@@ -1,1 +1,1 @@
-Add an "IMG." toggle beside every "read" toggle that opens the same overlay showing the section's images stacked full-width in a centered vertical row (image-only view).
+"IMG." renamed to "img". All read/img toggles get a ~18px invisible hit-area expansion (same look) so near-miss clicks still register; drag-to-pan is unchanged.

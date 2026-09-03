@@ -249,6 +249,13 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   cursor: pointer; user-select: none; -webkit-user-select: none;
   margin-top: 1.5em; margin-right: 3em;   /* one full line below the text above */
 }
+/* forgiving hit area: invisible padding around the toggle lets clicks slightly
+   off the visible box still register — appearance unchanged. */
+.read-toggle::after {
+  content: ''; position: absolute; left: -18px; right: -18px; top: -18px; bottom: -18px;
+}
+.read-toggle { position: relative; }
+.read-toggle + .read-toggle { margin-left: 1.2em; } /* tighter gap so both sit snugly together */
 .read-toggle input {
   transform: scale(2.8);            /* matches the other assist-toggles' square */
   margin: 0; vertical-align: middle; accent-color: #fff; cursor: pointer;
