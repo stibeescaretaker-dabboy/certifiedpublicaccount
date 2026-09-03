@@ -230,6 +230,8 @@
     holdRepeat(widget.querySelector('.nav-down'), 1);
   })();
 
+  var overlayOpen = false; /* true while the read/img overlay covers the screen —
+                              world pan/zoom pauses and the overlay drag-scrolls instead */
   /* ---- EXPERIMENTAL: reading & image modes. Every section carries "read" and
      "IMG." toggles (styled like the assist-toggles). "read" opens a black overlay
      with the section's text re-flowed; "IMG." opens the same overlay showing the
@@ -277,9 +279,10 @@
       activeBox = box;
       page.classList.toggle('img-mode', !!imgMode);
       if (imgMode) buildImages(section); else buildText(section);
+      overlayOpen = true;
       overlay.classList.add('open');
     }
-    function closeAll() { overlay.classList.remove('open'); if (activeBox) activeBox.checked = false; activeBox = null; }
+    function closeAll() { overlay.classList.remove('open'); overlayOpen = false; if (activeBox) activeBox.checked = false; activeBox = null; }
     function sectionOf(label) { return label.closest ? label.closest('.block') : null; }
 
     /* for every "read" toggle, add an "img" toggle beside it (skipping sections
@@ -314,6 +317,26 @@
       });
     });
     close.addEventListener('click', function (e) { e.stopPropagation(); e.preventDefault(); closeAll(); });
+
+    /* mouse drag-to-scroll: touch already scrolls natively (touch-action: pan-y),
+       but an overflow container ignores mouse drags — map them to scrolling so
+       the click-and-drag feel carries over into the reading view. */
+    var dragScrolling = false, dragStartY = 0, dragStartScroll = 0;
+    overlay.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;   /* native scroll handles touch */
+      if (e.button !== undefined && e.button !== 0) return;
+      if (e.target.closest && e.target.closest('.read-close')) return;  /* close stays a click */
+      dragScrolling = true;
+      dragStartY = e.clientY;
+      dragStartScroll = overlay.scrollTop;
+      e.preventDefault();                       /* don't select text/images while dragging */
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!dragScrolling) return;
+      overlay.scrollTop = dragStartScroll - (e.clientY - dragStartY);
+    });
+    window.addEventListener('pointerup', function () { dragScrolling = false; });
+    window.addEventListener('pointercancel', function () { dragScrolling = false; });
   })();
 
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
@@ -331,6 +354,7 @@
   window.addEventListener('dragstart', function (e) { e.preventDefault(); });
   window.addEventListener('pointerdown', function (e) {
     if (e.button !== undefined && e.button !== 0) return;
+    if (overlayOpen) return; /* overlay covers the screen: world pan pauses, the overlay drag-scrolls instead */
     try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved = 0; stopTween();
@@ -395,6 +419,7 @@
 
   /* ---- wheel zoom toward cursor ---- */
   window.addEventListener('wheel', function (e) {
+    if (overlayOpen) return; /* let the overlay scroll natively instead of zooming the hidden world */
     e.preventDefault(); stopTween();
     var d = e.deltaY;
     if (e.deltaMode === 1) d *= 33; else if (e.deltaMode === 2) d *= 400;

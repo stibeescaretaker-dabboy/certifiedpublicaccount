@@ -1,1 +1,1 @@
-Point site at the new custom domain: baseurl "" (root, no /certifiedpublicaccount path) and url https://www.tian-studio.com. Clean rebuild confirms data-root and asset paths resolve from root.
+Overlay interaction fix: while the read/img overlay is open, world pan/zoom pauses (pointerdown and wheel handlers gated on an overlayOpen flag), and the overlay becomes drag-scrollable — mouse drags scroll the content, wheel scrolls natively, touch keeps native pan-y. No visual changes.
