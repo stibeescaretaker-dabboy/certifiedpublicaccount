@@ -230,10 +230,11 @@
     holdRepeat(widget.querySelector('.nav-down'), 1);
   })();
 
-  /* ---- EXPERIMENTAL: reading mode. Every section carries a small "read"
-     toggle (checkbox + label, styled like the assist-toggles). Checking it
-     opens a black overlay with that section's text re-flowed for reading.
-     The toggle lives inside its section, so it travels with it while pan/zoom. ---- */
+  /* ---- EXPERIMENTAL: reading & image modes. Every section carries "read" and
+     "IMG." toggles (styled like the assist-toggles). "read" opens a black overlay
+     with the section's text re-flowed; "IMG." opens the same overlay showing the
+     section's images stacked in an optimized vertical row. The toggles live
+     inside their section, so they travel with it during pan/zoom. ---- */
   (function () {
     var overlay = document.createElement('div');
     overlay.className = 'read-overlay';
@@ -249,33 +250,65 @@
 
     var activeBox = null;
 
-    function build(section) {
-      /* clone the section and strip non-text leaves so only readable text remains */
+    function buildText(section) {
       var clone = section.cloneNode(true);
-      Array.prototype.forEach.call(clone.querySelectorAll('img, video, audio, .read-toggle'), function (el) {
+      Array.prototype.forEach.call(clone.querySelectorAll('img, video, audio, object, .read-toggle'), function (el) {
         if (el.parentNode) el.parentNode.removeChild(el);
       });
       page.innerHTML = '';
       page.appendChild(clone);
     }
-    function open(section, box) {
-      if (activeBox && activeBox !== box) activeBox.checked = false; /* one read view at a time */
+    function buildImages(section) {
+      page.innerHTML = '';
+      var imgs = section.querySelectorAll('img');
+      if (!imgs.length) {
+        page.textContent = 'This section has no images.';
+        return;
+      }
+      Array.prototype.forEach.call(imgs, function (src) {
+        var img = src.cloneNode(false);
+        img.className = 'read-img';
+        img.setAttribute('draggable', 'false');
+        page.appendChild(img);
+      });
+    }
+    function open(section, box, imgMode) {
+      if (activeBox && activeBox !== box) activeBox.checked = false; /* one view at a time */
       activeBox = box;
-      build(section);
+      page.classList.toggle('img-mode', !!imgMode);
+      if (imgMode) buildImages(section); else buildText(section);
       overlay.classList.add('open');
     }
     function closeAll() { overlay.classList.remove('open'); if (activeBox) activeBox.checked = false; activeBox = null; }
+    function sectionOf(label) { return label.closest ? label.closest('.block') : null; }
 
+    /* for every "read" toggle, add an "IMG." toggle beside it and wire both */
     Array.prototype.forEach.call(document.querySelectorAll('#column .read-toggle'), function (label) {
       var box = label.querySelector('input');
       if (!box) return;
+
+      var imgLabel = document.createElement('label');
+      imgLabel.className = 'read-toggle hand-ui';
+      var imgBox = document.createElement('input');
+      imgBox.type = 'checkbox';
+      imgLabel.appendChild(imgBox);
+      imgLabel.appendChild(document.createTextNode('IMG.'));
+      label.parentNode.insertBefore(imgLabel, label.nextSibling); /* to the right of "read" */
+
       box.addEventListener('change', function (e) {
         e.stopPropagation();
-        var section = label.closest ? label.closest('.block') : null;
-        if (box.checked) {
-          if (section) open(section, box); else box.checked = false;
-        } else closeAll();
+        if (activeBox && activeBox !== box) activeBox.checked = false;
+        if (box.checked) { if (imgBox.checked) imgBox.checked = false; if (sectionOf(label)) open(sectionOf(label), box, false); else box.checked = false; }
+        else closeAll();
       });
+      box.addEventListener('click', function (e) { e.stopPropagation(); });
+
+      imgBox.addEventListener('change', function (e) {
+        e.stopPropagation();
+        if (imgBox.checked) { if (box.checked) box.checked = false; if (sectionOf(imgLabel)) open(sectionOf(imgLabel), imgBox, true); else imgBox.checked = false; }
+        else closeAll();
+      });
+      imgBox.addEventListener('click', function (e) { e.stopPropagation(); });
     });
     close.addEventListener('click', function (e) { e.stopPropagation(); e.preventDefault(); closeAll(); });
   })();

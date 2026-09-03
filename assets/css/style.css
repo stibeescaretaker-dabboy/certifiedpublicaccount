@@ -253,6 +253,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   transform: scale(2.8);            /* matches the other assist-toggles' square */
   margin: 0; vertical-align: middle; accent-color: #fff; cursor: pointer;
 }
+.read-toggle + .read-toggle { margin-left: 3em; } /* "IMG." sits to the right of "read" */
 /* match the "read" label size to the text it sits under (it's a sibling of the
    big paragraph, so it needs an explicit size rather than inheriting a small one) */
 .sec1-text .read-toggle      { font-size: calc(32px * var(--fs)); }
@@ -295,6 +296,12 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-page .baro-amp { display: none; }
 .read-page .poem-text .duo { display: block; gap: 0; }
 .read-page .poem-text .duo span { display: block; margin: 0 0 20px; }
+/* image mode: full-width artwork stacked in a vertical row, centered */
+.read-page.img-mode { max-width: 1100px; padding: 60px 24px 100px; }
+.read-page.img-mode .read-img {
+  display: block; width: 100%; height: auto; margin: 0 auto 40px;
+  object-fit: contain; background: #000;
+}
 @media (max-width: 820px) {
   .read-page { font-size: 19px; padding: 72px 20px 96px; }
   .nav-btn { width: 32px; height: 32px; } /* 50% of the previous 64px */
