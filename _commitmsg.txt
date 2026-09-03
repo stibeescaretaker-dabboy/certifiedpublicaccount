@@ -1,1 +1,1 @@
-Reading mode: each section now has its own small "read" toggle (styled exactly like the assist toggles) placed inside the section, so it travels with the world. Checking opens a black overlay with just that section's text re-flowed for comfortable reading.
+Reading-mode fixes: each "read" toggle now matches its section's text size and sits one full line lower; the reading overlay forces the cloned section back to the comfortable 22px/1.8 measure and strips all section padding, so text is no longer cut off or oversized.
