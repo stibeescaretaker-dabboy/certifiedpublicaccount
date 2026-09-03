@@ -230,6 +230,50 @@
     holdRepeat(widget.querySelector('.nav-down'), 1);
   })();
 
+  /* ---- EXPERIMENTAL: reading mode. A screen-fixed button opens a black
+     overlay with the section's text re-flowed for comfortable reading
+     (measured line length, generous leading). Currently section 1 only. ---- */
+  (function () {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'read-btn hand-ui';
+    btn.textContent = 'read';
+    document.body.appendChild(btn);
+
+    var overlay = document.createElement('div');
+    overlay.className = 'read-overlay';
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'read-close hand-ui';
+    close.textContent = 'close';
+    overlay.appendChild(close);
+    var page = document.createElement('div');
+    page.className = 'read-page';
+    overlay.appendChild(page);
+    document.body.appendChild(overlay);
+
+    var loaded = false;
+    function open() {
+      if (!loaded) { /* copy the live text once, so there is a single source of truth */
+        var src = document.querySelector('#section-1 .sec1-text');
+        if (src) page.innerHTML = src.innerHTML;
+        loaded = true;
+      }
+      overlay.classList.add('open');
+    }
+    function closeAll() { overlay.classList.remove('open'); }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation(); e.preventDefault();
+      if (moved >= 8) return; /* it was a drag, not a tap */
+      open();
+    });
+    btn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+    close.addEventListener('click', function (e) {
+      e.stopPropagation(); e.preventDefault(); closeAll();
+    });
+  })();
+
   /* ---- pointer input: mouse drag, 1-finger pan, 2-finger pinch ---- */
   var pointers = new Map(), pinch = null, moved = 0;
   function snapPinch() { /* snapshot the two most recent fingers; a stale
