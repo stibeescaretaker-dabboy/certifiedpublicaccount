@@ -300,8 +300,19 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   font-size: inherit !important; line-height: inherit !important;
   max-width: none !important; margin-left: 0 !important;
 }
-.read-page .baro-vert { writing-mode: initial; transform: none; display: block; font-weight: bold; margin: 0 0 20px; }
+/* baro in the reading view: the two title lines and the medium line become
+   three separate centered blocks (block centered, text left-aligned as-is).
+   The world title is nowrap/vertical — both neutralized so it wraps normally. */
+.read-page .baro-row { display: block; }
+.read-page .baro-vert {
+  writing-mode: initial; transform: none; display: block;
+  white-space: normal; flex: initial; width: auto;
+  width: fit-content; margin: 0 auto 20px !important; font-weight: bold;
+}
 .read-page .baro-amp { display: none; }
+.read-page .baro-bottom { display: block; margin: 0 !important; }
+.read-page .baro-bottom .baro-line { display: block; width: fit-content; margin: 0 auto 12px !important; font-style: italic; }
+.read-page .baro-bottom .baro-meta { display: block; width: fit-content; margin: 0 auto !important; font-weight: bold; }
 /* poem in the reading view: neutralize the in-world stanza nudges — they're
    sized for the big world text, and their negative margins overlap stanzas
    badly at reading scale */

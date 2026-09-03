@@ -1,1 +1,1 @@
-Section 2 read mode: poem stanzas no longer overlap (in-world nudge margins with big negative values are neutralized at reading scale); the duo stays two side-by-side columns with the right one offset 4 lines so "I the ripple" lines up with "you the pebble" in the reading view too.
+Baro read mode: "When the shifts..." and "IMG_0027..." become separate title blocks centered on the page, with "LEAD INK OIL..." underneath; the long title wraps normally instead of overflowing.
