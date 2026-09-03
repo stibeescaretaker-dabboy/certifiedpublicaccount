@@ -302,8 +302,17 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 .read-page .baro-vert { writing-mode: initial; transform: none; display: block; font-weight: bold; margin: 0 0 20px; }
 .read-page .baro-amp { display: none; }
-.read-page .poem-text .duo { display: block; gap: 0; }
-.read-page .poem-text .duo span { display: block; margin: 0 0 20px; }
+/* poem in the reading view: neutralize the in-world stanza nudges — they're
+   sized for the big world text, and their negative margins overlap stanzas
+   badly at reading scale */
+.read-page .poem-text { display: block; }
+.read-page .poem-text p { margin: 0 0 1.4em !important; }
+.read-page .poem-text .caption { margin-bottom: 0 !important; }
+/* duo stays two side-by-side columns; right column offset 4 lines so
+   "I the ripple" lines up with "you the pebble" at reading scale */
+.read-page .poem-text .duo { display: flex; gap: 2.4em; }
+.read-page .poem-text .duo span { display: block; margin: 0 !important; }
+.read-page .poem-text .duo span + span { margin-top: 7.2em !important; }
 /* image mode: full-width artwork stacked in a vertical row, centered */
 .read-page.img-mode { max-width: 1100px; padding: 60px 24px 100px; }
 .read-page.img-mode .read-img {

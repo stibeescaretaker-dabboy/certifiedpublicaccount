@@ -1,1 +1,1 @@
-Overlay interaction fix: while the read/img overlay is open, world pan/zoom pauses (pointerdown and wheel handlers gated on an overlayOpen flag), and the overlay becomes drag-scrollable — mouse drags scroll the content, wheel scrolls natively, touch keeps native pan-y. No visual changes.
+Section 2 read mode: poem stanzas no longer overlap (in-world nudge margins with big negative values are neutralized at reading scale); the duo stays two side-by-side columns with the right one offset 4 lines so "I the ripple" lines up with "you the pebble" in the reading view too.
