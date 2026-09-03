@@ -1,1 +1,1 @@
-Fix reading mode: poem stanza spacing restored (toggle moved out of the space-between .poem-text into the section); overlay now allows touch-drag scrolling (pan-y); no "img" toggle in the statement section (no images).
+Point site at the new custom domain: baseurl "" (root, no /certifiedpublicaccount path) and url https://www.tian-studio.com. Clean rebuild confirms data-root and asset paths resolve from root.

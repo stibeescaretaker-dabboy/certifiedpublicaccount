@@ -2,8 +2,8 @@ title: Sebastian Cole Galvan
 description: >-
   Sebastian Cole Galvan — finished works 2022–2025. An interactive
   click-and-drag, pinch-and-zoom gallery built with Jekyll for GitHub Pages.
-baseurl: "/certifiedpublicaccount"   # project site: username.github.io/repo-name
-url: "https://stibeescaretaker-dabboy.github.io"
+baseurl: ""                                # custom domain serves at the root
+url: "https://www.tian-studio.com"
 markdown: kramdown
 exclude:
   - _preview
