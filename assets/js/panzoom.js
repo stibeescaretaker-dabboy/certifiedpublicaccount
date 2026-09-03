@@ -230,15 +230,17 @@
     holdRepeat(widget.querySelector('.nav-down'), 1);
   })();
 
-  /* ---- EXPERIMENTAL: reading mode. A screen-fixed button opens a black
-     overlay with the section's text re-flowed for comfortable reading
-     (measured line length, generous leading). Currently section 1 only. ---- */
+  /* ---- EXPERIMENTAL: reading mode. A screen-fixed control styled like the
+     other toggles (small square + label) opens a black overlay with the
+     section's text re-flowed for comfortable reading. Currently section 1. ---- */
   (function () {
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'read-btn hand-ui';
-    btn.textContent = 'read';
-    document.body.appendChild(btn);
+    var label = document.createElement('label');
+    label.className = 'read-toggle hand-ui';
+    var box = document.createElement('input');
+    box.type = 'checkbox';
+    label.appendChild(box);
+    label.appendChild(document.createTextNode('read'));
+    document.body.appendChild(label);
 
     var overlay = document.createElement('div');
     overlay.className = 'read-overlay';
@@ -254,21 +256,19 @@
 
     var loaded = false;
     function open() {
-      if (!loaded) { /* copy the live text once, so there is a single source of truth */
+      if (!loaded) { /* pull the live text once so it stays in sync with the page */
         var src = document.querySelector('#section-1 .sec1-text');
         if (src) page.innerHTML = src.innerHTML;
         loaded = true;
       }
       overlay.classList.add('open');
     }
-    function closeAll() { overlay.classList.remove('open'); }
+    function closeAll() { overlay.classList.remove('open'); box.checked = false; }
 
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation(); e.preventDefault();
-      if (moved >= 8) return; /* it was a drag, not a tap */
-      open();
+    box.addEventListener('change', function (e) {
+      e.stopPropagation();
+      if (box.checked) open(); else closeAll();
     });
-    btn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
     close.addEventListener('click', function (e) {
       e.stopPropagation(); e.preventDefault(); closeAll();
     });

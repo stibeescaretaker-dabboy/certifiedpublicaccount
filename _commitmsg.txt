@@ -1,1 +1,1 @@
-Undo all blurb width caps and center-positioning experiments; back to original text layout. Large-text code remains but hidden.
+Reading mode control restyled as a toggle (small square + "read" label, like the other controls), screen-fixed so it never moves while panning, scoped to section 1; checkbox opens/closes the black reading overlay.

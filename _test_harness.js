@@ -50,6 +50,7 @@ var document = {
   body: Object.assign(fakeEl(), { getAttribute: function () { return '/'; } }),
   head: { appendChild: function (e) { headKids.push(e); } },
   createElement: function (tag) { var el = fakeEl(); el.tag = tag; created.push(el); return el; },
+  createTextNode: function (t) { return { nodeType: 3, textContent: t }; },
   getElementById: function (id) {
     return { world: worldEl, column: columnEl, floaters: floatersEl,
       'bio-box': bioBox, 'axis-lock': axisBox, 'normal-mode': normalBox }[id] || null;
