@@ -1,1 +1,1 @@
-"IMG." renamed to "img". All read/img toggles get a ~18px invisible hit-area expansion (same look) so near-miss clicks still register; drag-to-pan is unchanged.
+Fix reading mode: poem stanza spacing restored (toggle moved out of the space-between .poem-text into the section); overlay now allows touch-drag scrolling (pan-y); no "img" toggle in the statement section (no images).

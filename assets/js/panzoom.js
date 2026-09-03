@@ -282,33 +282,36 @@
     function closeAll() { overlay.classList.remove('open'); if (activeBox) activeBox.checked = false; activeBox = null; }
     function sectionOf(label) { return label.closest ? label.closest('.block') : null; }
 
-    /* for every "read" toggle, add an "IMG." toggle beside it and wire both */
+    /* for every "read" toggle, add an "img" toggle beside it (skipping sections
+       with no images, like the statement) and wire both */
     Array.prototype.forEach.call(document.querySelectorAll('#column .read-toggle'), function (label) {
       var box = label.querySelector('input');
       if (!box) return;
+      var section = sectionOf(label) || label.parentNode;
 
-      var imgLabel = document.createElement('label');
-      imgLabel.className = 'read-toggle hand-ui';
-      var imgBox = document.createElement('input');
-      imgBox.type = 'checkbox';
-      imgLabel.appendChild(imgBox);
-      imgLabel.appendChild(document.createTextNode('img'));
-      label.parentNode.insertBefore(imgLabel, label.nextSibling); /* to the right of "read" */
+      if (section.querySelector('img')) {   /* only add "img" where there are images */
+        var imgLabel = document.createElement('label');
+        imgLabel.className = 'read-toggle hand-ui';
+        var imgBox = document.createElement('input');
+        imgBox.type = 'checkbox';
+        imgLabel.appendChild(imgBox);
+        imgLabel.appendChild(document.createTextNode('img'));
+        label.parentNode.insertBefore(imgLabel, label.nextSibling); /* to the right of "read" */
+      }
 
       box.addEventListener('change', function (e) {
         e.stopPropagation();
         if (activeBox && activeBox !== box) activeBox.checked = false;
-        if (box.checked) { if (imgBox.checked) imgBox.checked = false; if (sectionOf(label)) open(sectionOf(label), box, false); else box.checked = false; }
+        if (box.checked) { if (imgBox && imgBox.checked) imgBox.checked = false; if (sectionOf(label)) open(sectionOf(label), box, false); else box.checked = false; }
         else closeAll();
       });
       box.addEventListener('click', function (e) { e.stopPropagation(); });
 
-      imgBox.addEventListener('change', function (e) {
+      if (imgBox) imgBox.addEventListener('change', function (e) {
         e.stopPropagation();
         if (imgBox.checked) { if (box.checked) box.checked = false; if (sectionOf(imgLabel)) open(sectionOf(imgLabel), imgBox, true); else imgBox.checked = false; }
         else closeAll();
       });
-      imgBox.addEventListener('click', function (e) { e.stopPropagation(); });
     });
     close.addEventListener('click', function (e) { e.stopPropagation(); e.preventDefault(); closeAll(); });
   })();

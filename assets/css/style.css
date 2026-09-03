@@ -271,6 +271,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-overlay {
   display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 100;
   background: #000; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;   /* allow touch-drag scrolling inside the overlay (html/body are touch-action:none) */
 }
 .read-overlay.open { display: block; }
 .read-close {
