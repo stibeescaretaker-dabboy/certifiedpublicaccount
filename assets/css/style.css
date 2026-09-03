@@ -301,18 +301,20 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   max-width: none !important; margin-left: 0 !important;
 }
 /* baro in the reading view: the two title lines and the medium line become
-   three separate centered blocks (block centered, text left-aligned as-is).
-   The world title is nowrap/vertical — both neutralized so it wraps normally. */
+   separate blocks in the centered reading column (text left-aligned, like the
+   rest of the read view — NOT center-aligned). The world title is
+   nowrap/vertical — neutralized so it wraps normally. The "&" keeps its
+   place between the two titles. */
 .read-page .baro-row { display: block; }
 .read-page .baro-vert {
   writing-mode: initial; transform: none; display: block;
   white-space: normal; flex: initial; width: auto;
-  width: fit-content; margin: 0 auto 20px !important; font-weight: bold;
+  margin: 0 0 20px !important; font-weight: bold;
 }
-.read-page .baro-amp { display: none; }
+.read-page .baro-amp { display: block; margin: 0 0 12px !important; font-weight: bold; }
 .read-page .baro-bottom { display: block; margin: 0 !important; }
-.read-page .baro-bottom .baro-line { display: block; width: fit-content; margin: 0 auto 12px !important; font-style: italic; }
-.read-page .baro-bottom .baro-meta { display: block; width: fit-content; margin: 0 auto !important; font-weight: bold; }
+.read-page .baro-bottom .baro-line { display: block; margin: 0 0 12px !important; font-style: italic; }
+.read-page .baro-bottom .baro-meta { display: block; margin: 0 !important; font-weight: bold; }
 /* poem in the reading view: neutralize the in-world stanza nudges — they're
    sized for the big world text, and their negative margins overlap stanzas
    badly at reading scale */
