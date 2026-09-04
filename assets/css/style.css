@@ -294,6 +294,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-page .block, .read-page section, .read-page header, .read-page div {
   padding: 0 !important; margin: 0 !important; width: auto; background: none;
 }
+.read-page p { padding: 0 !important; }  /* worlds set padding on p (e.g. .secstatement p {padding-left:480px}); must clear so text stays in-column */
 .read-page h1, .read-page h2, .read-page h3, .read-page p, .read-page span,
 .read-page .cap-head, .read-page .cap-body, .read-page .body, .read-page .meta,
 .read-page .baro-vert, .read-page .baro-bottom, .read-page .baro-line,
