@@ -283,6 +283,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   max-width: 68ch; margin: 0 auto; padding: 96px 28px 120px;
   color: #fff; font-size: 22px; line-height: 1.8; text-align: left;
 }
+.read-page.wide { max-width: 136ch; } /* statement prose: double the standard measure */
 .read-page h2 { font-style: italic; display: inline; margin-right: 24px; }
 .read-page .meta { font-weight: bold; }
 .read-page .body { margin-top: 32px; }

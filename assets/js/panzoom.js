@@ -278,6 +278,8 @@
       if (activeBox && activeBox !== box) activeBox.checked = false; /* one view at a time */
       activeBox = box;
       page.classList.toggle('img-mode', !!imgMode);
+      /* statement prose reads better at double the standard measure */
+      page.classList.toggle('wide', !!(section.classList && section.classList.contains('secstatement')));
       if (imgMode) buildImages(section); else buildText(section);
       overlayOpen = true;
       overlay.classList.add('open');

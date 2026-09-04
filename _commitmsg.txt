@@ -1,1 +1,1 @@
-Baro read mode round 2: title/IMG/LEAD lines are plain left-aligned blocks in the centered reading column (no more pseudo-center-aligned fit-content blocks), and the "&" is restored between the two titles.
+Statement read view: prose column doubled to 136ch (JS toggles a wide class on the overlay page for the statement section only).
