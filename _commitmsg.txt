@@ -1,1 +1,1 @@
-Statement read view: prose column doubled to 136ch (JS toggles a wide class on the overlay page for the statement section only).
+Phone fixes: poem duo columns set to align-items:flex-start so the 4-line offset cleanly lines "I the ripple" with "you the pebble" (was flex-stretch, which shifted the offset at taller phone line-heights — both in-world and overlay). Statement read column capped to the phone viewport so the wide 136ch no longer overflows and hides text.
