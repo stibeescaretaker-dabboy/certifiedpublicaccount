@@ -1,3 +1,4 @@
+read/img toggles: one font size larger (32-40 -> 35-44) and red text, squares stay white
 poem-piece.jpg re-encoded at 3600px q95 (~1.8MB) matching the other photos' sharpness
 Re-encode all section photos at 2400px q90 (was 1600px q82) closer to original PNG quality
 Temporarily hide the up/down section nav widget pending redesign - code kept, one CSS line to restore

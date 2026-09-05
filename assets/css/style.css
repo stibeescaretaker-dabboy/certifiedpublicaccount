@@ -247,7 +247,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
    screen-fixed floating button). ---- */
 .read-toggle {
   display: inline-flex; align-items: center; gap: 14px;
-  color: #fff; white-space: nowrap;
+  color: #ff2d2d; white-space: nowrap;   /* red text (square stays white) */
   cursor: pointer; user-select: none; -webkit-user-select: none;
   margin-top: 1.5em; margin-right: 3em;   /* one full line below the text above */
 }
@@ -265,11 +265,11 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-toggle + .read-toggle { margin-left: 3em; } /* "IMG." sits to the right of "read" */
 /* match the "read" label size to the text it sits under (it's a sibling of the
    big paragraph, so it needs an explicit size rather than inheriting a small one) */
-.sec1-text .read-toggle      { font-size: calc(32px * var(--fs)); }
-.sec2 .read-toggle           { font-size: calc(38px * var(--fs)); }
-.secbaro .read-toggle        { font-size: calc(38px * var(--fs)); }
-.secstatement .read-toggle   { font-size: calc(40px * var(--fs)); }
-.art-caption .read-toggle    { font-size: calc(34px * var(--fs)); }
+.sec1-text .read-toggle      { font-size: calc(35px * var(--fs)); }
+.sec2 .read-toggle           { font-size: calc(42px * var(--fs)); }
+.secbaro .read-toggle        { font-size: calc(42px * var(--fs)); }
+.secstatement .read-toggle   { font-size: calc(44px * var(--fs)); }
+.art-caption .read-toggle    { font-size: calc(37px * var(--fs)); }
 .read-overlay {
   display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 100;
   background: #000; overflow-y: auto; -webkit-overflow-scrolling: touch;
