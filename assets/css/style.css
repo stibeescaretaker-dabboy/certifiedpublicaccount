@@ -338,14 +338,14 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
    more two font sizes). Side-by-side at 19px needs ~410px but the column is only
    ~335px, so the right column slides LEFT into the whitespace beside the short
    paired lines: "you the pebble".."you sweat" are <=127px wide at 19px (only the
-   unpaired lines above/below the pairing band are wide). left:9em clears them
-   with a comfortable gap (right column's widest line ends at 171+124=295px,
-   inside the 335px column) while every line stays on one line.
+   unpaired lines above/below the pairing band are wide). left:10em puts the
+   right column's widest line (124px) ending at ~333px, right before the ~355px
+   column edge, while every line stays on one line.
    top:5.6em = 4 lines keeps
    "you the pebble"<gap>"I the ripple" .. "you sweat"<gap>"I the chemistry". */
 @media (max-width: 820px) {
   .read-page .poem-text .duo { position: relative; display: block; font-size: 19px !important; line-height: 1.4 !important; }
-  .read-page .poem-text .duo span + span { position: absolute; left: 9em; top: 5.6em; margin: 0 !important; }
+  .read-page .poem-text .duo span + span { position: absolute; left: 10em; top: 5.6em; margin: 0 !important; }
 }
 /* image mode: full-width artwork stacked in a vertical row, centered */
 .read-page.img-mode { max-width: 1100px; padding: 60px 24px 100px; }

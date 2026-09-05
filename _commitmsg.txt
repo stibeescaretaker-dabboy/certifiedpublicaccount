@@ -1,9 +1,2 @@
-Poem pairing made device-proof + bigger overlay gap. Root cause of the world poem
-starting at "And me": on the user's phone the italic font renders a hair wider than
-the test browser, wrapping the 836px-longest line, which shifted the left column
-down one line while "I the ripple" kept its fixed 4-line offset. Fix: white-space
-nowrap on both duo spans (world and overlay) - lines are far narrower than the
-4000px world column / 335px overlay column, so wrapping is never wanted. Phone
-overlay gap widened 7.3em -> 9em (right column's widest line ends at 295px of 335px).
-Verified: offset exactly 4 lines both views, 14/5 lines, no wrapping, right column
-inside the column edge.
+Poem overlay gap: right column now ends at ~333px, right before the ~355px column
+edge (left:10em), per request. Offset still exactly 4 lines, 14/5 lines, no wrapping.
