@@ -333,12 +333,13 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-page .poem-text .duo { display: flex; gap: 2.4em; align-items: flex-start; }
 .read-page .poem-text .duo span { display: block; margin: 0 !important; }
 .read-page .poem-text .duo span + span { margin-top: 7.2em !important; }
-/* phone overlay: a 375px column can't hold two poem columns without heavy
-   wrapping that breaks any offset — stack the columns for readable single-col */
+/* phone overlay: shrink the poem duo so both columns fit side-by-side WITHOUT
+   wrapping (wrapping is what broke the offset). 15px/1.4 with a small gap keeps
+   the widest lines on a single line, so the 4-line offset pairs
+   "you the pebble"<gap>"I the ripple" all the way to "you sweat"<gap>"I the chemistry". */
 @media (max-width: 820px) {
-  .read-page .poem-text .duo { display: block; }
-  .read-page .poem-text .duo span { margin: 0 0 1.4em !important; }
-  .read-page .poem-text .duo span + span { margin-top: 1.4em !important; }
+  .read-page .poem-text .duo { font-size: 15px; line-height: 1.4; gap: 12px; }
+  .read-page .poem-text .duo span + span { margin-top: 5.6em !important; } /* = 4 × (15×1.4)=84px */
 }
 /* image mode: full-width artwork stacked in a vertical row, centered */
 .read-page.img-mode { max-width: 1100px; padding: 60px 24px 100px; }
