@@ -1,7 +1,9 @@
-Poem fix, phone: overlay keeps the same 19px as the rest of the read view (no more
-second font size) - the right column now slides left beside the short paired lines
-(left:7.3em, they are <=127px wide at 19px) with top:5.6em = 4 lines, so
-"you the pebble"<gap>"I the ripple" .. "you sweat"<gap>"I the chemistry" all stay on
-single lines in the 375px column. World poem verified in layout space: span offset
-333px = exactly 4 lines at phone scale, columns 14/5 lines, no wrapping. Reverted an
-erroneous .sec2 phone gap/padding tweak from the same investigation.
+Poem pairing made device-proof + bigger overlay gap. Root cause of the world poem
+starting at "And me": on the user's phone the italic font renders a hair wider than
+the test browser, wrapping the 836px-longest line, which shifted the left column
+down one line while "I the ripple" kept its fixed 4-line offset. Fix: white-space
+nowrap on both duo spans (world and overlay) - lines are far narrower than the
+4000px world column / 335px overlay column, so wrapping is never wanted. Phone
+overlay gap widened 7.3em -> 9em (right column's widest line ends at 295px of 335px).
+Verified: offset exactly 4 lines both views, 14/5 lines, no wrapping, right column
+inside the column edge.
