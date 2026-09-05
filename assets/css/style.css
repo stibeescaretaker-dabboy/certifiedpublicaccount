@@ -238,6 +238,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .nav-down        { background-image: url("../images/down_base.png"); }
 .nav-down:active { background-image: url("../images/down_click.png"); }
 .nav-widget .nav-btn:not(.nav-toggle) { display: none; }   /* arrows hidden until opened */
+.nav-widget { display: none; }   /* TEMP: widget hidden pending redesign — delete this line to bring it back */
 .nav-widget.open  .nav-btn { display: block; }             /* widget pressed: show arrows */
 /* ---- experimental reading mode (created by panzoom.js). Each section carries
    a small "read" checkbox+label (styled like the assist-toggles); checking it
