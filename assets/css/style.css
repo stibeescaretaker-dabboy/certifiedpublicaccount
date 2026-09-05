@@ -333,15 +333,16 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-page .poem-text .duo { display: flex; gap: 2.4em; align-items: flex-start; }
 .read-page .poem-text .duo span { display: block; margin: 0 !important; }
 .read-page .poem-text .duo span + span { margin-top: 7.2em !important; }
-/* phone overlay: shrink the poem duo so both columns fit side-by-side WITHOUT
-   wrapping (wrapping is what broke the offset). 15px/1.4 with a small gap keeps
-   the widest lines on a single line, so the 4-line offset pairs
-   "you the pebble"<gap>"I the ripple" all the way to "you sweat"<gap>"I the chemistry". */
+/* phone overlay: keep the poem at the same 19px as the rest of the overlay (no
+   more two font sizes). Side-by-side at 19px needs ~410px but the column is only
+   ~335px, so the right column slides LEFT into the whitespace beside the short
+   paired lines: "you the pebble".."you sweat" are <=127px wide at 19px (only the
+   unpaired lines above/below the pairing band are wide), so left:7.3em clears
+   them while every line stays on one line. top:5.6em = 4 lines keeps
+   "you the pebble"<gap>"I the ripple" .. "you sweat"<gap>"I the chemistry". */
 @media (max-width: 820px) {
-  /* !important needed to beat the read-page p/span nullifier (font-size:inherit !important);
-     otherwise the duo keeps inheriting 19px and the columns stay too wide */
-  .read-page .poem-text .duo { font-size: 15px !important; line-height: 1.4 !important; gap: 12px; }
-  .read-page .poem-text .duo span + span { margin-top: 84px !important; } /* = 4 lines × (15px×1.4) */
+  .read-page .poem-text .duo { position: relative; display: block; font-size: 19px !important; line-height: 1.4 !important; }
+  .read-page .poem-text .duo span + span { position: absolute; left: 7.3em; top: 5.6em; margin: 0 !important; }
 }
 /* image mode: full-width artwork stacked in a vertical row, centered */
 .read-page.img-mode { max-width: 1100px; padding: 60px 24px 100px; }

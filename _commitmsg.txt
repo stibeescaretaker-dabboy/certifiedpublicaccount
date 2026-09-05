@@ -1,1 +1,7 @@
-Fix phone overlay poem shrinking: the duo's font-size/line-height needed !important to beat the read-page nullifier (.read-page p/span {font-size:inherit!important}), which was forcing the duo to keep 19px and defeating the shrink. Now 15px/1.4 applies, columns fit side-by-side without wrapping, and the 84px offset lines columns up.
+Poem fix, phone: overlay keeps the same 19px as the rest of the read view (no more
+second font size) - the right column now slides left beside the short paired lines
+(left:7.3em, they are <=127px wide at 19px) with top:5.6em = 4 lines, so
+"you the pebble"<gap>"I the ripple" .. "you sweat"<gap>"I the chemistry" all stay on
+single lines in the 375px column. World poem verified in layout space: span offset
+333px = exactly 4 lines at phone scale, columns 14/5 lines, no wrapping. Reverted an
+erroneous .sec2 phone gap/padding tweak from the same investigation.
