@@ -247,7 +247,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
    screen-fixed floating button). ---- */
 .read-toggle {
   display: inline-flex; align-items: center; gap: 14px;
-  color: #fff; white-space: nowrap;
+  color: #ff2d2d; white-space: nowrap;   /* read/img labels only — red */
   cursor: pointer; user-select: none; -webkit-user-select: none;
   margin-top: 1.5em; margin-right: 3em;   /* one full line below the text above */
 }
