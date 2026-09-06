@@ -1,3 +1,4 @@
+read/img labels: red switched to purple (#a855f7)
 Restore red for read/img labels only (they are the only elements .read-toggle styles); larger sizes unchanged
 Undo red text on read/img toggles (keep the one-size-larger labels)
 read/img toggles: one font size larger (32-40 -> 35-44) and red text, squares stay white
