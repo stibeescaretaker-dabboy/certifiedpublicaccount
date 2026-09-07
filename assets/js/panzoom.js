@@ -150,8 +150,10 @@
   if (normalBox) normalBox.addEventListener('change', function () {
     normalMode = normalBox.checked;
     stopTween();
-    if (normalMode && s < minS()) zoomAt(vw / 2, vh / 2, minS() / s); /* pull in to the fit scale */
-    else { clamp(); apply(); }
+    if (normalMode) {
+      /* locked zoom clicked: zoom out a little (fit-scale pull-in still applies if needed) */
+      zoomAt(vw / 2, vh / 2, 0.85);
+    } else { clamp(); apply(); }
   });
   if (normalBox) normalMode = normalBox.checked; /* honor the checked default from the markup */
 
