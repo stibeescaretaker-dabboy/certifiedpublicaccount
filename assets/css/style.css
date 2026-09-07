@@ -146,7 +146,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .poem-text p { max-width: 1750px; }
 /* desktop stanza nudges: 1 line = calc(57px * var(--fs)); the negative bottom
    margin cancels the shift so later stanzas and the caption stay put */
-.poem-text p:nth-child(1) { margin-top: calc(171px * var(--fs)); margin-bottom: calc(-171px * var(--fs)); } /* stanza 1 down 3 lines */
+.poem-text p:nth-child(1) { margin-top: calc(285px * var(--fs)); margin-bottom: calc(-285px * var(--fs)); } /* stanza 1 down 5 lines (3 + 2 more per request) */
 .poem-text p:nth-child(2) { margin-top: calc(228px * var(--fs)); margin-bottom: calc(-228px * var(--fs)); } /* stanza 2 down 4 lines */
 /* right column of the duo starts 4 lines lower: "I the ripple".."I the chemistry"
    lines up with "you the pebble".."you sweat" instead of "at an unfathomable distance".."you the pebble" */

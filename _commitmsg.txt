@@ -1,3 +1,4 @@
+Poem stanza 1 (desktop) lowered 2 more lines (3->5): 171px->285px nudge, negative bottom keeps everything else in place
 Zoom-out-on-click moved to UNTOGGLING locked zoom (leaving locked mode zooms out x0.85); toggling it on keeps the fit-scale pull-in
 Clicking locked zoom now zooms out a little (x0.85, clamped to the fit scale)
 read/img labels: red switched to purple (#a855f7)
