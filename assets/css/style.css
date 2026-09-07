@@ -153,6 +153,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .poem-text .duo span + span { margin-top: calc(228px * var(--fs)); }
 .poem-text .duo { display: flex; gap: 96px; max-width: none; align-items: flex-start; } /* flex-start: columns keep natural height so the offset lines them up cleanly */
 .poem-text .duo span { white-space: nowrap; } /* the longest line sets the span width exactly; a device rendering it 1px wider would wrap and shift the whole column, breaking the 4-line pairing ("I the ripple" landing beside "And me" instead of "You the pebble"). Lines are far narrower than the 4000px column, so nowrap is always safe. */
+.poem-text p:last-child { margin-top: calc(-57px * var(--fs)); } /* last stanza up 1 line (desktop) */
 .poem-text .caption { font-style: normal; font-weight: bold; margin-top: 40px; margin-bottom: 0; }
 
 /* ---- sections 3-5 : artwork ---- */
