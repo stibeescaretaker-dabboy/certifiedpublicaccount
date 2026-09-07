@@ -1,3 +1,4 @@
+Zoom-out-on-click moved to UNTOGGLING locked zoom (leaving locked mode zooms out x0.85); toggling it on keeps the fit-scale pull-in
 Clicking locked zoom now zooms out a little (x0.85, clamped to the fit scale)
 read/img labels: red switched to purple (#a855f7)
 Restore red for read/img labels only (they are the only elements .read-toggle styles); larger sizes unchanged

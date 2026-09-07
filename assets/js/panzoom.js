@@ -151,9 +151,12 @@
     normalMode = normalBox.checked;
     stopTween();
     if (normalMode) {
-      /* locked zoom clicked: zoom out a little (fit-scale pull-in still applies if needed) */
+      if (s < minS()) zoomAt(vw / 2, vh / 2, minS() / s); /* turning it ON: pull in to the fit scale */
+      else { clamp(); apply(); }
+    } else {
+      /* turning it OFF (untoggle): zoom out a little, clamped to the unlocked min */
       zoomAt(vw / 2, vh / 2, 0.85);
-    } else { clamp(); apply(); }
+    }
   });
   if (normalBox) normalMode = normalBox.checked; /* honor the checked default from the markup */
 
