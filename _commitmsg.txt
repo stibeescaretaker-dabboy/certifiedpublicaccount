@@ -1,3 +1,4 @@
+Wheel fists fixes: pinch pair now straddles the cursor (one above, one below, cursor centered) starting 220px apart; scroll fist respawns fresh at the bottom on every new scroll gesture (the old one stayed stuck where it drifted)
 Trackpad support: two-finger scroll pans the column (axis lock honored), trackpad pinch (ctrl+wheel) zooms; mouse wheel unchanged. Scroll spawns a fist in the bottom half moving opposite the scroll; pinch shows a fist at the focal point plus one starting 120px away that spreads/closes with zoom; both open and fade 2s after the gesture stops
 Thin dividers 20px tall (was 27)
 Thin section dividers 3/4 as tall (36px -> 27px)

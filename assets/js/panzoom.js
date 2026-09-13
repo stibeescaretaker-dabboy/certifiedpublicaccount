@@ -584,65 +584,77 @@
     document.body.appendChild(el);
     return el;
   }
-  /* scroll fist: spawns in the bottom half, moves opposite the scroll, opens
-     and fades 2s after scrolling stops */
+  /* scroll fist: each scroll gesture spawns a NEW fist in the bottom half that
+     moves opposite the scroll; when scrolling stops it opens and fades 2s */
   var sfEl = null, sfTimer = 0;
   function sfEvent(dx, dy) {
-    if (!sfEl) {
+    clearTimeout(sfTimer);
+    if (!sfEl) { /* fresh gesture: spawn at the bottom half, not where the last one drifted */
       sfEl = vcMake();
+      sfEl.src = ROOT + 'assets/images/cursor-closed.png';
       sfEl.style.left = (vw * 0.5) + 'px';
       sfEl.style.top = (vh * 0.72) + 'px';
+      sfEl.classList.add('show');
+    } else { /* continuing the same gesture: re-close and keep moving */
+      sfEl.src = ROOT + 'assets/images/cursor-closed.png';
+      sfEl.classList.remove('fade', 'fade2');
+      sfEl.classList.add('show');
     }
-    clearTimeout(sfTimer);
-    sfEl.src = ROOT + 'assets/images/cursor-closed.png';
-    sfEl.classList.remove('fade', 'fade2');
-    sfEl.classList.add('show');
     var y = parseFloat(sfEl.style.top) - dy * 0.5; /* opposite the scroll */
     y = Math.min(vh - 70, Math.max(vh * 0.5, y));
     sfEl.style.top = y + 'px';
-    sfTimer = setTimeout(function () {
-      sfEl.src = ROOT + 'assets/images/cursor-open.png';
-      sfEl.classList.remove('show');
-      sfEl.classList.add('fade2');
-      sfTimer = setTimeout(function () {
-        if (sfEl.parentNode) sfEl.parentNode.removeChild(sfEl);
-        sfEl = null;
-      }, 2100);
-    }, 150);
+    sfTimer = setTimeout(sfStop, 150);
   }
-  /* pinch fists: one pinned at the focal point (the cursor), one starting a
-     fixed distance away that moves further when zooming in, closer when out */
-  var pfA = null, pfB = null, pfTimer = 0, pfD = 120, pfX = 0, pfY = 0;
-  function pfShow(cx, cy) {
-    if (!pfA) {
-      pfA = vcMake(); pfB = vcMake();
-      pfX = cx; pfY = cy; pfD = 120;
-      pfA.src = ROOT + 'assets/images/cursor-closed.png';
-      pfB.src = ROOT + 'assets/images/cursor-closed.png';
-      pfA.style.left = pfX + 'px'; pfA.style.top = pfY + 'px';
-      pfB.style.left = pfX + 'px'; pfB.style.top = (pfY - pfD) + 'px';
-      pfA.classList.add('show'); pfB.classList.add('show');
-    }
-    clearTimeout(pfTimer);
-    pfA.classList.remove('fade', 'fade2'); pfB.classList.remove('fade', 'fade2');
-    pfA.classList.add('show'); pfB.classList.add('show');
+  function sfStop() {
+    if (!sfEl) return;
+    var el = sfEl;
+    sfEl = null; /* the gesture ended: the next scroll spawns a brand-new fist */
+    el.src = ROOT + 'assets/images/cursor-open.png';
+    el.classList.remove('show');
+    el.classList.add('fade2');
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 2100);
+  }
+  /* pinch fists: the cursor is the CENTER — one fist on each side, starting
+     220px apart (110px each side), spreading further when zooming in and
+     closing when zooming out; they open and fade 2s after the pinch stops */
+  var pfA = null, pfB = null, pfTimer = 0, pfD = 220, pfX = 0, pfY = 0;
+  function pfPlace() {
+    pfA.style.left = pfX + 'px'; pfA.style.top = (pfY - pfD / 2) + 'px';
+    pfB.style.left = pfX + 'px'; pfB.style.top = (pfY + pfD / 2) + 'px';
   }
   function pfEvent(f, cx, cy) {
-    pfShow(cx, cy);
-    pfD = Math.min(Math.max(pfD * f, 26), Math.min(vw, vh) * 0.7);
-    pfB.style.top = (pfY - pfD) + 'px';
     clearTimeout(pfTimer);
-    pfTimer = setTimeout(function () {
-      pfA.src = ROOT + 'assets/images/cursor-open.png';
-      pfB.src = ROOT + 'assets/images/cursor-open.png';
-      pfA.classList.remove('show'); pfB.classList.remove('show');
-      pfA.classList.add('fade2'); pfB.classList.add('fade2');
-      pfTimer = setTimeout(function () {
-        if (pfA.parentNode) pfA.parentNode.removeChild(pfA);
-        if (pfB.parentNode) pfB.parentNode.removeChild(pfB);
-        pfA = null; pfB = null;
-      }, 2100);
-    }, 150);
+    if (!pfA) { /* fresh pinch: spawn centered on the focal point (cursor) */
+      pfA = vcMake(); pfB = vcMake();
+      pfX = cx; pfY = cy; pfD = 220;
+      pfA.src = ROOT + 'assets/images/cursor-closed.png';
+      pfB.src = ROOT + 'assets/images/cursor-closed.png';
+      pfPlace();
+      pfA.classList.add('show'); pfB.classList.add('show');
+    } else { /* continuing: re-close and keep spreading/closing */
+      pfA.src = ROOT + 'assets/images/cursor-closed.png';
+      pfB.src = ROOT + 'assets/images/cursor-closed.png';
+      pfA.classList.remove('fade', 'fade2'); pfB.classList.remove('fade', 'fade2');
+      pfA.classList.add('show'); pfB.classList.add('show');
+    }
+    pfD = Math.min(Math.max(pfD * f, 40), Math.min(vw, vh) * 0.8);
+    pfPlace();
+    pfTimer = setTimeout(pfStop, 150);
+  }
+  function pfStop() {
+    if (!pfA) return;
+    var a = pfA, b = pfB;
+    pfA = null; pfB = null; /* next pinch spawns a fresh pair centered on its own focal point */
+    a.src = ROOT + 'assets/images/cursor-open.png';
+    b.src = ROOT + 'assets/images/cursor-open.png';
+    a.classList.remove('show'); b.classList.remove('show');
+    a.classList.add('fade2'); b.classList.add('fade2');
+    setTimeout(function () {
+      if (a.parentNode) a.parentNode.removeChild(a);
+      if (b.parentNode) b.parentNode.removeChild(b);
+    }, 2100);
   }
 
   /* ---- wheel: mouse zooms toward cursor; trackpad scroll pans, pinch zooms ---- */
