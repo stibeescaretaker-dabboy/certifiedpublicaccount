@@ -69,6 +69,12 @@
     momentumId++;
     /* cap the release speed so a fast flick can't rocket the view */
     var cap = 26, ax = Math.max(-cap, Math.min(cap, velX)), ay = Math.max(-cap, Math.min(cap, velY));
+    /* movement assist (axis lock) governs the glide too: one axis only,
+       the one the gesture committed to (or the dominant velocity direction) */
+    if (axisBox && axisBox.checked) {
+      var ax2 = axis || (Math.abs(ax) >= Math.abs(ay) ? 'x' : 'y');
+      if (ax2 === 'x') ay = 0; else ax = 0;
+    }
     var id = momentumId, decay = 0.90;
     (function step() {
       if (id !== momentumId) return;         /* any new touch/zoom cancels the glide */
@@ -417,8 +423,13 @@
        lift of two fingers otherwise slingshots a bogus momentum release.
        Leeway: ~24px of real dragging after the pinch re-arms momentum. */
     if (pinched) {
-      postPinchDist += Math.abs(dx) + Math.abs(dy);
-      if (postPinchDist > 24) { pinched = false; velX = 0; velY = 0; lastMoveT = Date.now(); }
+      /* velocity only re-arms while ONE finger remains after the pinch.
+         Counting movement during the pinch itself would re-arm mid-gesture
+         (two fingers feed the same counter) and rebuild the slingshot. */
+      if (pointers.size === 1 && !pinch) {
+        postPinchDist += Math.abs(dx) + Math.abs(dy);
+        if (postPinchDist > 24) { pinched = false; velX = 0; velY = 0; lastMoveT = Date.now(); }
+      }
     } else {
       var now = Date.now(), dt = Math.max(1, now - lastMoveT); lastMoveT = now;
       var fx = (dx / dt) * 16.7, fy = (dy / dt) * 16.7; /* normalize to px per frame */

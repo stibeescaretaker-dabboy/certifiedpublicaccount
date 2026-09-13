@@ -1,3 +1,4 @@
+Momentum: axis lock now governs the glide (no diagonal drift with movement assist on); pinch re-arm counter only counts single-finger movement AFTER the pinch — counting two-finger moves re-armed mid-pinch and rebuilt the slingshot
 Slingshot fix: pinched stays frozen through the staggered finger-lift; velocity only re-arms after ~24px of genuine dragging with the remaining finger (or on a fresh gesture)
 Fix: pinched flag never reset (dead condition in pointerdown) — now resets on new first finger and when a pinch ends with one finger still down, re-arming the glide
 Momentum fixes: no glide after a pinch (pinched flag, velocity zeroed on 2nd finger — the cross-finger velocity was causing the acceleration/drift), glide weakened (decay 0.93->0.90, threshold 1.2->2, release speed capped at 26px/frame)
