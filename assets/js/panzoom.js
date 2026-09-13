@@ -560,13 +560,114 @@
   window.addEventListener('pointerup', endPointer);
   window.addEventListener('pointercancel', endPointer);
 
-  /* ---- wheel zoom toward cursor ---- */
+  /* ---- trackpad vs mouse: two-finger scroll pans like a traditional site,
+     trackpad pinch (browsers map it to ctrl+wheel) zooms, mouse wheel zooms ----
+     Detection: trackpads emit small/fractional deltas, often both axes at once;
+     mouse wheels emit large integer jumps on Y only. Score recent events. */
+  var wpScore = 0, wpDecided = false, wpIsTrackpad = false;
+  function trackpadLike(e, dy0) {
+    if (wpDecided) return wpIsTrackpad;
+    var frac = Math.abs(e.deltaY % 1) > 0.01 || Math.abs(e.deltaX % 1) > 0.01;
+    var hasX = Math.abs(e.deltaX) > 0.5;
+    var small = Math.abs(dy0) > 0 && Math.abs(dy0) < 50;
+    if (frac) wpScore += 2;
+    if (hasX) wpScore += 2;
+    if (small) wpScore += 1;
+    if (Math.abs(dy0) >= 90 && !frac && !hasX) wpScore -= 3;
+    if (wpScore >= 3) { wpDecided = true; wpIsTrackpad = true; }
+    if (wpScore <= -3) { wpDecided = true; wpIsTrackpad = false; }
+    return wpDecided ? wpIsTrackpad : (frac || hasX || small);
+  }
+  function vcMake() {
+    var el = document.createElement('img');
+    el.className = 'virtual-cursor'; el.alt = ''; el.draggable = false;
+    document.body.appendChild(el);
+    return el;
+  }
+  /* scroll fist: spawns in the bottom half, moves opposite the scroll, opens
+     and fades 2s after scrolling stops */
+  var sfEl = null, sfTimer = 0;
+  function sfEvent(dx, dy) {
+    if (!sfEl) {
+      sfEl = vcMake();
+      sfEl.style.left = (vw * 0.5) + 'px';
+      sfEl.style.top = (vh * 0.72) + 'px';
+    }
+    clearTimeout(sfTimer);
+    sfEl.src = ROOT + 'assets/images/cursor-closed.png';
+    sfEl.classList.remove('fade', 'fade2');
+    sfEl.classList.add('show');
+    var y = parseFloat(sfEl.style.top) - dy * 0.5; /* opposite the scroll */
+    y = Math.min(vh - 70, Math.max(vh * 0.5, y));
+    sfEl.style.top = y + 'px';
+    sfTimer = setTimeout(function () {
+      sfEl.src = ROOT + 'assets/images/cursor-open.png';
+      sfEl.classList.remove('show');
+      sfEl.classList.add('fade2');
+      sfTimer = setTimeout(function () {
+        if (sfEl.parentNode) sfEl.parentNode.removeChild(sfEl);
+        sfEl = null;
+      }, 2100);
+    }, 150);
+  }
+  /* pinch fists: one pinned at the focal point (the cursor), one starting a
+     fixed distance away that moves further when zooming in, closer when out */
+  var pfA = null, pfB = null, pfTimer = 0, pfD = 120, pfX = 0, pfY = 0;
+  function pfShow(cx, cy) {
+    if (!pfA) {
+      pfA = vcMake(); pfB = vcMake();
+      pfX = cx; pfY = cy; pfD = 120;
+      pfA.src = ROOT + 'assets/images/cursor-closed.png';
+      pfB.src = ROOT + 'assets/images/cursor-closed.png';
+      pfA.style.left = pfX + 'px'; pfA.style.top = pfY + 'px';
+      pfB.style.left = pfX + 'px'; pfB.style.top = (pfY - pfD) + 'px';
+      pfA.classList.add('show'); pfB.classList.add('show');
+    }
+    clearTimeout(pfTimer);
+    pfA.classList.remove('fade', 'fade2'); pfB.classList.remove('fade', 'fade2');
+    pfA.classList.add('show'); pfB.classList.add('show');
+  }
+  function pfEvent(f, cx, cy) {
+    pfShow(cx, cy);
+    pfD = Math.min(Math.max(pfD * f, 26), Math.min(vw, vh) * 0.7);
+    pfB.style.top = (pfY - pfD) + 'px';
+    clearTimeout(pfTimer);
+    pfTimer = setTimeout(function () {
+      pfA.src = ROOT + 'assets/images/cursor-open.png';
+      pfB.src = ROOT + 'assets/images/cursor-open.png';
+      pfA.classList.remove('show'); pfB.classList.remove('show');
+      pfA.classList.add('fade2'); pfB.classList.add('fade2');
+      pfTimer = setTimeout(function () {
+        if (pfA.parentNode) pfA.parentNode.removeChild(pfA);
+        if (pfB.parentNode) pfB.parentNode.removeChild(pfB);
+        pfA = null; pfB = null;
+      }, 2100);
+    }, 150);
+  }
+
+  /* ---- wheel: mouse zooms toward cursor; trackpad scroll pans, pinch zooms ---- */
   window.addEventListener('wheel', function (e) {
     if (overlayOpen) return; /* let the overlay scroll natively instead of zooming the hidden world */
     e.preventDefault(); stopTween();
-    var d = e.deltaY;
-    if (e.deltaMode === 1) d *= 33; else if (e.deltaMode === 2) d *= 400;
-    zoomAt(e.clientX, e.clientY, Math.exp(-d * 0.0016));
+    var k = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1;
+    var dy = e.deltaY * k, dx = e.deltaX * k;
+    if (e.ctrlKey) { /* trackpad pinch gesture (or ctrl+wheel) → zoom */
+      var f = Math.exp(-dy * 0.0016);
+      pfEvent(f, e.clientX, e.clientY);
+      zoomAt(e.clientX, e.clientY, f);
+      return;
+    }
+    if (trackpadLike(e, dy)) { /* two-finger scroll → pan like a traditional site */
+      sfEvent(dx, dy);
+      if (axisBox && axisBox.checked) {
+        if (!axis && Math.abs(dx) + Math.abs(dy) > 20) axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'x') dy = 0; else if (axis === 'y') dx = 0;
+      }
+      tx -= dx; ty -= dy; clamp(); apply();
+      return;
+    }
+    /* mouse wheel: zoom toward the cursor (unchanged) */
+    zoomAt(e.clientX, e.clientY, Math.exp(-dy * 0.0016));
   }, { passive: false });
 
   /* ---- keyboard ---- */

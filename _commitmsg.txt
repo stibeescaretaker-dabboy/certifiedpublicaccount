@@ -1,3 +1,4 @@
+Trackpad support: two-finger scroll pans the column (axis lock honored), trackpad pinch (ctrl+wheel) zooms; mouse wheel unchanged. Scroll spawns a fist in the bottom half moving opposite the scroll; pinch shows a fist at the focal point plus one starting 120px away that spreads/closes with zoom; both open and fade 2s after the gesture stops
 Thin dividers 20px tall (was 27)
 Thin section dividers 3/4 as tall (36px -> 27px)
 read/img: square-to-label space (gap 14px -> 0.65em, scales with font), one size larger again (39/46/48/41 -> 43/51/53/45); momentum cap 34 -> 40

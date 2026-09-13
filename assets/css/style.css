@@ -113,6 +113,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 .virtual-cursor.show { opacity: 1; transition: opacity 120ms; }
 .virtual-cursor.fade { opacity: 0; transition: opacity 3s ease-out; }
+.virtual-cursor.fade2 { opacity: 0; transition: opacity 2s ease-out; }   /* wheel-trackpad fists: 2s fade */
 
 /* ---- dividers ---- */
 .divider-thin {
