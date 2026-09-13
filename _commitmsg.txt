@@ -1,3 +1,4 @@
+Thin dividers 20px tall (was 27)
 Thin section dividers 3/4 as tall (36px -> 27px)
 read/img: square-to-label space (gap 14px -> 0.65em, scales with font), one size larger again (39/46/48/41 -> 43/51/53/45); momentum cap 34 -> 40
 read/img labels one font size larger again (35/42/44/37 -> 39/46/48/41)
