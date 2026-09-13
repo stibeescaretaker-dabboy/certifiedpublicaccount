@@ -68,7 +68,7 @@
     if (Math.abs(velX) + Math.abs(velY) < 2) return; /* slow release: stop in place */
     momentumId++;
     /* cap the release speed so a fast flick can't rocket the view */
-    var cap = 26, ax = Math.max(-cap, Math.min(cap, velX)), ay = Math.max(-cap, Math.min(cap, velY));
+    var cap = 34, ax = Math.max(-cap, Math.min(cap, velX)), ay = Math.max(-cap, Math.min(cap, velY));
     /* movement assist (axis lock) governs the glide too: one axis only,
        the one the gesture committed to (or the dominant velocity direction) */
     if (axisBox && axisBox.checked) {
@@ -313,6 +313,80 @@
         page.appendChild(img);
       });
     }
+
+    /* ---- zoom inside the img overlay: pinch (touch), wheel, drag-to-pan ----
+       The page div carries the zoom transform (origin 0 0); zoom >= 1.
+       While zoomed in, the overlay switches to touch-action:none and we pan it
+       ourselves (native vertical scroll would fight the pan). */
+    var oz = 1, ox = 0, oy = 0, oPointers = new Map(), oPinch = null, oPan = null;
+    function oApply() {
+      page.style.transformOrigin = '0 0';
+      page.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(' + oz + ')';
+      overlay.style.touchAction = oz > 1.01 ? 'none' : 'pan-y';
+    }
+    function oReset() {
+      oz = 1; ox = 0; oy = 0; oPinch = null; oPan = null;
+      page.style.transform = ''; oApply();
+    }
+    overlay.addEventListener('pointerdown', function (e) {
+      if (!page.classList.contains('img-mode')) return;
+      if (e.target.closest && e.target.closest('.read-close')) return;
+      if (e.button !== undefined && e.button !== 0) return;
+      try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
+      oPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      e.preventDefault();
+      if (oPointers.size >= 2) {
+        var pts = Array.from(oPointers.values());
+        var d = Math.max(dist(pts[0], pts[1]), 24);
+        oPinch = { d0: d, oz0: oz, ox0: ox, oy0: oy, mx: (pts[0].x + pts[1].x) / 2, my: (pts[0].y + pts[1].y) / 2 };
+        oPan = null;
+      } else if (oz > 1.01) {
+        oPan = { x: e.clientX, y: e.clientY };
+      }
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!oPointers.has(e.pointerId)) return;
+      var p = oPointers.get(e.pointerId);
+      var dx = e.clientX - p.x, dy = e.clientY - p.y;
+      p.x = e.clientX; p.y = e.clientY;
+      if (oPointers.size >= 2 && oPinch) {
+        var pts = Array.from(oPointers.values());
+        var d = Math.max(dist(pts[0], pts[1]), 24);
+        var f = Math.max(0.5, Math.min(2, d / oPinch.d0));
+        var noz = Math.min(8, Math.max(1, oPinch.oz0 * f));
+        var mx = (pts[0].x + pts[1].x) / 2, my = (pts[0].y + pts[1].y) / 2;
+        /* keep the pinch midpoint fixed, plus follow the midpoint's own drift */
+        ox = oPinch.ox0 + (oPinch.mx - oPinch.ox0) * (1 - noz / oPinch.oz0) + (mx - oPinch.mx);
+        oy = oPinch.oy0 + (oPinch.my - oPinch.oy0) * (1 - noz / oPinch.oz0) + (my - oPinch.my);
+        oz = noz; oApply();
+      } else if (oPan && oPointers.size === 1 && oz > 1.01) {
+        ox += dx; oy += dy; oApply();
+      }
+    });
+    function oEnd(e) {
+      if (!oPointers.has(e.pointerId)) return;
+      oPointers.delete(e.pointerId);
+      oPinch = null; oPan = null;
+      if (oPointers.size === 0 && oz <= 1.01) oReset();
+    }
+    window.addEventListener('pointerup', oEnd);
+    window.addEventListener('pointercancel', oEnd);
+    overlay.addEventListener('wheel', function (e) {
+      if (!page.classList.contains('img-mode')) return; /* text mode scrolls natively */
+      e.preventDefault();
+      var f = Math.exp(-e.deltaY * 0.0016);
+      var noz = Math.min(8, Math.max(1, oz * f));
+      if (noz === oz) return;
+      /* keep the cursor's point fixed while zooming */
+      var rect = page.getBoundingClientRect();
+      var mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      ox = mx - (mx - ox) * (noz / oz);
+      oy = my - (my - oy) * (noz / oz);
+      oz = noz;
+      if (oz <= 1.001) { ox = 0; oy = 0; oz = 1; }
+      oApply();
+    }, { passive: false });
+
     function open(section, box, imgMode) {
       if (activeBox && activeBox !== box) activeBox.checked = false; /* one view at a time */
       activeBox = box;
@@ -320,10 +394,11 @@
       /* statement prose reads better at double the standard measure */
       page.classList.toggle('wide', !!(section.classList && section.classList.contains('secstatement')));
       if (imgMode) buildImages(section); else buildText(section);
+      oReset(); /* fresh view: clear any zoom from the previous img view */
       overlayOpen = true;
       overlay.classList.add('open');
     }
-    function closeAll() { overlay.classList.remove('open'); overlayOpen = false; if (activeBox) activeBox.checked = false; activeBox = null; }
+    function closeAll() { oReset(); overlay.classList.remove('open'); overlayOpen = false; if (activeBox) activeBox.checked = false; activeBox = null; }
     function sectionOf(label) { return label.closest ? label.closest('.block') : null; }
 
     /* for every "read" toggle, add an "img" toggle beside it (skipping sections
