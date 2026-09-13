@@ -61,7 +61,7 @@
   }
   /* ---- momentum glide: a drag release keeps gliding, decaying to a stop ----
      pan-yanked-to-a-stop feels clunky; a short inertial glide feels native. */
-  var momentumId = 0, velX = 0, velY = 0, lastMoveT = 0, pinched = false;
+  var momentumId = 0, velX = 0, velY = 0, lastMoveT = 0, pinched = false, postPinchDist = 0;
   function startMomentum() {
     if (overlayOpen) return;
     if (pinched) return;                      /* a pinch is a zoom, not a flick: no glide */
@@ -395,7 +395,7 @@
     moved = 0; stopTween();
     momentumId++; /* a fresh touch kills any glide */
     if (pointers.size === 1) { /* first finger of a new gesture: pinch state resets */
-      pinched = false;
+      pinched = false; postPinchDist = 0;
       velX = 0; velY = 0; lastMoveT = Date.now();
     }
     axis = null;
@@ -404,7 +404,7 @@
       vcurShow(e.pointerId, e.clientX, e.clientY, ui);
     }
     document.body.classList.add('dragging');
-    if (pointers.size >= 2) { snapPinch(); pinched = true; velX = 0; velY = 0; } /* two fingers: velocity cross-talk, so no glide after this gesture */
+    if (pointers.size >= 2) { snapPinch(); pinched = true; postPinchDist = 0; velX = 0; velY = 0; } /* two fingers: velocity cross-talk, so no glide after this gesture */
   });
   window.addEventListener('pointermove', function (e) {
     var p = pointers.get(e.pointerId);
@@ -412,10 +412,18 @@
     var dx = e.clientX - p.x, dy = e.clientY - p.y;
     p.x = e.clientX; p.y = e.clientY;
     moved += Math.abs(dx) + Math.abs(dy);
-    /* smoothed per-frame velocity, for the release glide */
-    var now = Date.now(), dt = Math.max(1, now - lastMoveT); lastMoveT = now;
-    var fx = (dx / dt) * 16.7, fy = (dy / dt) * 16.7; /* normalize to px per frame */
-    velX = velX * 0.7 + fx * 0.3; velY = velY * 0.7 + fy * 0.3;
+    /* smoothed per-frame velocity, for the release glide.
+       While pinched (or in the pinch-tail), velocity stays frozen: the staggered
+       lift of two fingers otherwise slingshots a bogus momentum release.
+       Leeway: ~24px of real dragging after the pinch re-arms momentum. */
+    if (pinched) {
+      postPinchDist += Math.abs(dx) + Math.abs(dy);
+      if (postPinchDist > 24) { pinched = false; velX = 0; velY = 0; lastMoveT = Date.now(); }
+    } else {
+      var now = Date.now(), dt = Math.max(1, now - lastMoveT); lastMoveT = now;
+      var fx = (dx / dt) * 16.7, fy = (dy / dt) * 16.7; /* normalize to px per frame */
+      velX = velX * 0.7 + fx * 0.3; velY = velY * 0.7 + fy * 0.3;
+    }
     if (e.pointerType === 'touch') vcurMove(e.pointerId, e.clientX, e.clientY);
     if (pointers.size === 1) {
       if (axisBox && axisBox.checked) {
@@ -443,12 +451,9 @@
     if (!pointers.has(e.pointerId)) return;
     pointers.delete(e.pointerId);
     snapPinch();
-    if (pointers.size === 1 && !pinch) {
-      /* pinch ended, one finger still down: back to a pan gesture —
-         re-arm momentum, restarting velocity from the remaining finger */
-      pinched = false;
-      velX = 0; velY = 0; lastMoveT = Date.now();
-    }
+    /* NOTE: when a pinch ends with one finger still down, `pinched` deliberately
+       stays set — the staggered lift must not slingshot. Velocity stays frozen
+       until the remaining finger drags ~24px (handled in pointermove). */
     if (pointers.size === 0) {
       document.body.classList.remove('dragging');
       /* a real drag (not a tap, not a pinch) glides a little after release */
