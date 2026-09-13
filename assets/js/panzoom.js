@@ -589,19 +589,19 @@
   var sfEl = null, sfTimer = 0;
   function sfEvent(dx, dy) {
     clearTimeout(sfTimer);
-    if (!sfEl) { /* fresh gesture: spawn at the bottom half, not where the last one drifted */
+    if (!sfEl) { /* fresh gesture: spawn halfway up the screen */
       sfEl = vcMake();
       sfEl.src = ROOT + 'assets/images/cursor-closed.png';
       sfEl.style.left = (vw * 0.5) + 'px';
-      sfEl.style.top = (vh * 0.72) + 'px';
+      sfEl.style.top = (vh * 0.5) + 'px';
       sfEl.classList.add('show');
     } else { /* continuing the same gesture: re-close and keep moving */
       sfEl.src = ROOT + 'assets/images/cursor-closed.png';
       sfEl.classList.remove('fade', 'fade2');
       sfEl.classList.add('show');
     }
-    var y = parseFloat(sfEl.style.top) - dy * 0.5; /* opposite the scroll */
-    y = Math.min(vh - 70, Math.max(vh * 0.5, y));
+    var y = parseFloat(sfEl.style.top) - Math.max(-40, Math.min(40, dy * 0.5)); /* opposite the scroll; capped per event so rapid scrolling tracks instead of clamping */
+    y = Math.min(vh * 0.85, Math.max(vh * 0.35, y));
     sfEl.style.top = y + 'px';
     sfTimer = setTimeout(sfStop, 150);
   }
@@ -616,19 +616,20 @@
       if (el.parentNode) el.parentNode.removeChild(el);
     }, 2100);
   }
-  /* pinch fists: the cursor is the CENTER — one fist on each side, starting
-     220px apart (110px each side), spreading further when zooming in and
-     closing when zooming out; they open and fade 2s after the pinch stops */
-  var pfA = null, pfB = null, pfTimer = 0, pfD = 220, pfX = 0, pfY = 0;
+  /* pinch fists: the cursor is the CENTER — the pair straddles it diagonally
+     at 45 degrees, starting 270px apart, spreading when zooming in and closing
+     when out; they open and fade 2s after the pinch stops */
+  var pfA = null, pfB = null, pfTimer = 0, pfD = 270, pfX = 0, pfY = 0;
   function pfPlace() {
-    pfA.style.left = pfX + 'px'; pfA.style.top = (pfY - pfD / 2) + 'px';
-    pfB.style.left = pfX + 'px'; pfB.style.top = (pfY + pfD / 2) + 'px';
+    var d = pfD * 0.35355; /* half-spacing projected on each axis for 45 degrees */
+    pfA.style.left = (pfX + d) + 'px'; pfA.style.top = (pfY - d) + 'px';   /* up-right */
+    pfB.style.left = (pfX - d) + 'px'; pfB.style.top = (pfY + d) + 'px';   /* down-left */
   }
   function pfEvent(f, cx, cy) {
     clearTimeout(pfTimer);
     if (!pfA) { /* fresh pinch: spawn centered on the focal point (cursor) */
       pfA = vcMake(); pfB = vcMake();
-      pfX = cx; pfY = cy; pfD = 220;
+      pfX = cx; pfY = cy; pfD = 270;
       pfA.src = ROOT + 'assets/images/cursor-closed.png';
       pfB.src = ROOT + 'assets/images/cursor-closed.png';
       pfPlace();
@@ -663,8 +664,8 @@
     e.preventDefault(); stopTween();
     var k = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1;
     var dy = e.deltaY * k, dx = e.deltaX * k;
-    if (e.ctrlKey) { /* trackpad pinch gesture (or ctrl+wheel) → zoom */
-      var f = Math.exp(-dy * 0.0016);
+    if (e.ctrlKey) { /* trackpad pinch gesture (or ctrl+wheel) → zoom (boosted: pinch deltas are small) */
+      var f = Math.exp(-dy * 0.005);
       pfEvent(f, e.clientX, e.clientY);
       zoomAt(e.clientX, e.clientY, f);
       return;
