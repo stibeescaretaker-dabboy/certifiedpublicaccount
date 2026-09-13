@@ -116,7 +116,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 /* ---- dividers ---- */
 .divider-thin {
-  height: 36px;
+  height: 27px;   /* 3/4 of the original 36px */
   background: linear-gradient(90deg, #2020ff, #00b4ff, #00e070, #c8e600, #ffc800, #ff7300, #ff2020);
 }
 .divider-big {
