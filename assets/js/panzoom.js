@@ -61,12 +61,15 @@
   }
   /* ---- momentum glide: a drag release keeps gliding, decaying to a stop ----
      pan-yanked-to-a-stop feels clunky; a short inertial glide feels native. */
-  var momentumId = 0, velX = 0, velY = 0, lastMoveT = 0;
+  var momentumId = 0, velX = 0, velY = 0, lastMoveT = 0, pinched = false;
   function startMomentum() {
     if (overlayOpen) return;
-    if (Math.abs(velX) + Math.abs(velY) < 1.2) return; /* slow release: stop in place */
+    if (pinched) return;                      /* a pinch is a zoom, not a flick: no glide */
+    if (Math.abs(velX) + Math.abs(velY) < 2) return; /* slow release: stop in place */
     momentumId++;
-    var id = momentumId, ax = velX, ay = velY, decay = 0.93;
+    /* cap the release speed so a fast flick can't rocket the view */
+    var cap = 26, ax = Math.max(-cap, Math.min(cap, velX)), ay = Math.max(-cap, Math.min(cap, velY));
+    var id = momentumId, decay = 0.90;
     (function step() {
       if (id !== momentumId) return;         /* any new touch/zoom cancels the glide */
       tx += ax; ty += ay; clamp(); apply();
@@ -392,13 +395,14 @@
     moved = 0; stopTween();
     momentumId++; /* a fresh touch kills any glide */
     velX = 0; velY = 0; lastMoveT = Date.now();
+    if (pointers.size === 0) pinched = false;   /* new gesture: pinch state resets */
     axis = null;
     if (e.pointerType === 'touch') {
       var ui = !!(e.target.closest && e.target.closest('.hand-ui'));
       vcurShow(e.pointerId, e.clientX, e.clientY, ui);
     }
     document.body.classList.add('dragging');
-    if (pointers.size >= 2) snapPinch();
+    if (pointers.size >= 2) { snapPinch(); pinched = true; velX = 0; velY = 0; } /* two fingers: velocity cross-talk, so no glide after this gesture */
   });
   window.addEventListener('pointermove', function (e) {
     var p = pointers.get(e.pointerId);
