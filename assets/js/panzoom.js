@@ -49,6 +49,31 @@
     ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
   function apply() { world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')'; }
+  /* ---- fluid panning: coalesce pan/zoom style writes to one per frame ----
+     phones fire pointermove faster than the screen refreshes; writing the
+     transform for every event wastes work and reads as sluggish. Both move
+     paths call scheduleApply() and the transform lands once per frame. */
+  var rafPending = false;
+  function scheduleApply() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(function () { rafPending = false; clamp(); apply(); });
+  }
+  /* ---- momentum glide: a drag release keeps gliding, decaying to a stop ----
+     pan-yanked-to-a-stop feels clunky; a short inertial glide feels native. */
+  var momentumId = 0, velX = 0, velY = 0, lastMoveT = 0;
+  function startMomentum() {
+    if (overlayOpen) return;
+    if (Math.abs(velX) + Math.abs(velY) < 1.2) return; /* slow release: stop in place */
+    momentumId++;
+    var id = momentumId, ax = velX, ay = velY, decay = 0.93;
+    (function step() {
+      if (id !== momentumId) return;         /* any new touch/zoom cancels the glide */
+      tx += ax; ty += ay; clamp(); apply();
+      ax *= decay; ay *= decay;
+      if (Math.abs(ax) + Math.abs(ay) > 0.3) requestAnimationFrame(step);
+    })();
+  }
   function initialView() {
     if (normalMode) {
       /* locked zoom on: start maxed zoomed out, column top flush with the top of the page */
@@ -365,6 +390,8 @@
     try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved = 0; stopTween();
+    momentumId++; /* a fresh touch kills any glide */
+    velX = 0; velY = 0; lastMoveT = Date.now();
     axis = null;
     if (e.pointerType === 'touch') {
       var ui = !!(e.target.closest && e.target.closest('.hand-ui'));
@@ -379,6 +406,10 @@
     var dx = e.clientX - p.x, dy = e.clientY - p.y;
     p.x = e.clientX; p.y = e.clientY;
     moved += Math.abs(dx) + Math.abs(dy);
+    /* smoothed per-frame velocity, for the release glide */
+    var now = Date.now(), dt = Math.max(1, now - lastMoveT); lastMoveT = now;
+    var fx = (dx / dt) * 16.7, fy = (dy / dt) * 16.7; /* normalize to px per frame */
+    velX = velX * 0.7 + fx * 0.3; velY = velY * 0.7 + fy * 0.3;
     if (e.pointerType === 'touch') vcurMove(e.pointerId, e.clientX, e.clientY);
     if (pointers.size === 1) {
       if (axisBox && axisBox.checked) {
@@ -387,7 +418,7 @@
         if (axis === 'x') dy = 0;
         else if (axis === 'y') dx = 0;
       }
-      tx += dx; ty += dy; clamp(); apply();
+      tx += dx; ty += dy; scheduleApply();
     }
     else if (pointers.size >= 2 && pinch) {
       /* incremental pinch: zoom anchored at the current midpoint, capped
@@ -399,7 +430,7 @@
       pinch.ld = d;
       var ns = Math.min(MAX_S, Math.max(minS(), s * f));
       var wx = (mx - tx) / s, wy = (my - ty) / s;
-      s = ns; tx = mx - wx * ns; ty = my - wy * ns; clamp(); apply();
+      s = ns; tx = mx - wx * ns; ty = my - wy * ns; scheduleApply();
     }
   });
   function endPointer(e) {
@@ -408,6 +439,8 @@
     snapPinch();
     if (pointers.size === 0) {
       document.body.classList.remove('dragging');
+      /* a real drag (not a tap, not a pinch) glides a little after release */
+      if (moved >= 8 && !pinch) startMomentum();
     }
     /* release whichever finger lifted — its open fist fades in place (works per-finger during a pinch) */
     if (e.pointerType === 'touch') { lastTouchT = Date.now(); vcurRelease(e.pointerId, e.clientX, e.clientY); }
@@ -457,7 +490,7 @@
 
   /* ---- animated fly-to (down arrows) ---- */
   var tweenId = 0;
-  function stopTween() { tweenId++; }
+  function stopTween() { tweenId++; momentumId++; } /* also cancels any glide */
   function worldRectOf(el) {
     var x = 0, y = 0, n = el;
     while (n && n !== world) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }

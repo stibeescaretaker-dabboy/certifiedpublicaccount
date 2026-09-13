@@ -1,3 +1,4 @@
+Fluidity: rAF-batch pan/pinch transform writes (phones fire more moves than frames); add inertial glide after drag release (decay 0.93, killed by any new touch/zoom); slow releases still stop in place
 Poem last stanza (desktop) up 1 line: -57px margin-top
 Poem stanza 1 (desktop) lowered 2 more lines (3->5): 171px->285px nudge, negative bottom keeps everything else in place
 Zoom-out-on-click moved to UNTOGGLING locked zoom (leaving locked mode zooms out x0.85); toggling it on keeps the fit-scale pull-in
