@@ -1,3 +1,4 @@
+Fix: pinched flag never reset (dead condition in pointerdown) — now resets on new first finger and when a pinch ends with one finger still down, re-arming the glide
 Momentum fixes: no glide after a pinch (pinched flag, velocity zeroed on 2nd finger — the cross-finger velocity was causing the acceleration/drift), glide weakened (decay 0.93->0.90, threshold 1.2->2, release speed capped at 26px/frame)
 Fluidity: rAF-batch pan/pinch transform writes (phones fire more moves than frames); add inertial glide after drag release (decay 0.93, killed by any new touch/zoom); slow releases still stop in place
 Poem last stanza (desktop) up 1 line: -57px margin-top

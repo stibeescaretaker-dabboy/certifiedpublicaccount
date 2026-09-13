@@ -394,8 +394,10 @@
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     moved = 0; stopTween();
     momentumId++; /* a fresh touch kills any glide */
-    velX = 0; velY = 0; lastMoveT = Date.now();
-    if (pointers.size === 0) pinched = false;   /* new gesture: pinch state resets */
+    if (pointers.size === 1) { /* first finger of a new gesture: pinch state resets */
+      pinched = false;
+      velX = 0; velY = 0; lastMoveT = Date.now();
+    }
     axis = null;
     if (e.pointerType === 'touch') {
       var ui = !!(e.target.closest && e.target.closest('.hand-ui'));
@@ -441,6 +443,12 @@
     if (!pointers.has(e.pointerId)) return;
     pointers.delete(e.pointerId);
     snapPinch();
+    if (pointers.size === 1 && !pinch) {
+      /* pinch ended, one finger still down: back to a pan gesture —
+         re-arm momentum, restarting velocity from the remaining finger */
+      pinched = false;
+      velX = 0; velY = 0; lastMoveT = Date.now();
+    }
     if (pointers.size === 0) {
       document.body.classList.remove('dragging');
       /* a real drag (not a tap, not a pinch) glides a little after release */
