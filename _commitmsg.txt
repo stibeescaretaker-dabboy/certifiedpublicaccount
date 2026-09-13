@@ -1,3 +1,4 @@
+read/img: square-to-label space (gap 14px -> 0.65em, scales with font), one size larger again (39/46/48/41 -> 43/51/53/45); momentum cap 34 -> 40
 read/img labels one font size larger again (35/42/44/37 -> 39/46/48/41)
 Momentum cap 26->34; img overlay: pinch/wheel zoom into images (1-8x), drag to pan while zoomed, zoom resets on open/close
 Momentum: axis lock now governs the glide (no diagonal drift with movement assist on); pinch re-arm counter only counts single-finger movement AFTER the pinch — counting two-finger moves re-armed mid-pinch and rebuilt the slingshot

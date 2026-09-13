@@ -247,7 +247,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
    The toggle lives inside its section, so it pans/zooms with it (it isn't a
    screen-fixed floating button). ---- */
 .read-toggle {
-  display: inline-flex; align-items: center; gap: 14px;
+  display: inline-flex; align-items: center; gap: 0.65em;   /* visible space between square and label, scales with font size */
   color: #a855f7; white-space: nowrap;   /* read/img labels only — purple */
   cursor: pointer; user-select: none; -webkit-user-select: none;
   margin-top: 1.5em; margin-right: 3em;   /* one full line below the text above */
@@ -266,11 +266,11 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .read-toggle + .read-toggle { margin-left: 3em; } /* "IMG." sits to the right of "read" */
 /* match the "read" label size to the text it sits under (it's a sibling of the
    big paragraph, so it needs an explicit size rather than inheriting a small one) */
-.sec1-text .read-toggle      { font-size: calc(39px * var(--fs)); }
-.sec2 .read-toggle           { font-size: calc(46px * var(--fs)); }
-.secbaro .read-toggle        { font-size: calc(46px * var(--fs)); }
-.secstatement .read-toggle   { font-size: calc(48px * var(--fs)); }
-.art-caption .read-toggle    { font-size: calc(41px * var(--fs)); }
+.sec1-text .read-toggle      { font-size: calc(43px * var(--fs)); }
+.sec2 .read-toggle           { font-size: calc(51px * var(--fs)); }
+.secbaro .read-toggle        { font-size: calc(51px * var(--fs)); }
+.secstatement .read-toggle   { font-size: calc(53px * var(--fs)); }
+.art-caption .read-toggle    { font-size: calc(45px * var(--fs)); }
 .read-overlay {
   display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 100;
   background: #000; overflow-y: auto; -webkit-overflow-scrolling: touch;

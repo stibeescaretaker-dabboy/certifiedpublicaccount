@@ -68,7 +68,7 @@
     if (Math.abs(velX) + Math.abs(velY) < 2) return; /* slow release: stop in place */
     momentumId++;
     /* cap the release speed so a fast flick can't rocket the view */
-    var cap = 34, ax = Math.max(-cap, Math.min(cap, velX)), ay = Math.max(-cap, Math.min(cap, velY));
+    var cap = 40, ax = Math.max(-cap, Math.min(cap, velX)), ay = Math.max(-cap, Math.min(cap, velY));
     /* movement assist (axis lock) governs the glide too: one axis only,
        the one the gesture committed to (or the dominant velocity direction) */
     if (axisBox && axisBox.checked) {
