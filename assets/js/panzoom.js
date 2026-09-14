@@ -584,37 +584,28 @@
     document.body.appendChild(el);
     return el;
   }
-  /* scroll fist: each scroll gesture spawns a NEW fist in the bottom half that
-     moves opposite the scroll; when scrolling stops it opens and fades 2s */
-  var sfEl = null, sfTimer = 0;
+  /* scroll fist: every scroll tick spawns a NEW fist, offset opposite the
+     scroll from mid-screen — rapid scrolling lays down a marching trail of
+     fists. No clamp/cap: they're free to drift past the edges (they fade). */
+  var sfLast = 0, sfAcc = 0;
   function sfEvent(dx, dy) {
-    clearTimeout(sfTimer);
-    if (!sfEl) { /* fresh gesture: spawn halfway up the screen */
-      sfEl = vcMake();
-      sfEl.src = ROOT + 'assets/images/cursor-closed.png';
-      sfEl.style.left = (vw * 0.5) + 'px';
-      sfEl.style.top = (vh * 0.5) + 'px';
-      sfEl.classList.add('show');
-    } else { /* continuing the same gesture: re-close and keep moving */
-      sfEl.src = ROOT + 'assets/images/cursor-closed.png';
-      sfEl.classList.remove('fade', 'fade2');
-      sfEl.classList.add('show');
-    }
-    var y = parseFloat(sfEl.style.top) - Math.max(-40, Math.min(40, dy * 0.5)); /* opposite the scroll; capped per event so rapid scrolling tracks instead of clamping */
-    y = Math.min(vh * 0.85, Math.max(vh * 0.35, y));
-    sfEl.style.top = y + 'px';
-    sfTimer = setTimeout(sfStop, 150);
-  }
-  function sfStop() {
-    if (!sfEl) return;
-    var el = sfEl;
-    sfEl = null; /* the gesture ended: the next scroll spawns a brand-new fist */
-    el.src = ROOT + 'assets/images/cursor-open.png';
-    el.classList.remove('show');
-    el.classList.add('fade2');
+    var now = Date.now();
+    if (now - sfLast > 400) sfAcc = 0; /* a pause starts a new trail from center */
+    sfLast = now;
+    sfAcc -= dy * 0.35;
+    var el = vcMake();
+    el.src = ROOT + 'assets/images/cursor-closed.png';
+    el.style.left = (vw * 0.5) + 'px';
+    el.style.top = (vh * 0.5 + sfAcc) + 'px';
+    el.classList.add('show');
     setTimeout(function () {
-      if (el.parentNode) el.parentNode.removeChild(el);
-    }, 2100);
+      el.src = ROOT + 'assets/images/cursor-open.png';
+      el.classList.remove('show');
+      el.classList.add('fade2');
+      setTimeout(function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, 2100);
+    }, 120); /* brief closed moment, then opens and fades */
   }
   /* pinch fists: the cursor is the CENTER — the pair straddles it diagonally
      at 45 degrees, starting 270px apart, spreading when zooming in and closing
@@ -665,7 +656,7 @@
     var k = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? 400 : 1;
     var dy = e.deltaY * k, dx = e.deltaX * k;
     if (e.ctrlKey) { /* trackpad pinch gesture (or ctrl+wheel) → zoom (boosted: pinch deltas are small) */
-      var f = Math.exp(-dy * 0.005);
+      var f = Math.exp(-dy * 0.012);
       pfEvent(f, e.clientX, e.clientY);
       zoomAt(e.clientX, e.clientY, f);
       return;
