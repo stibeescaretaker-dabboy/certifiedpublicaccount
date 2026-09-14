@@ -1,3 +1,5 @@
+Virtual fist cursors sized to 32px tall (matches OS cursor render size; was 38px wide = ~61px tall)
+Scroll fist spawns 100px away from the cursor on the side it's on (left half -> left, right half -> right)
 Scroll fist: slower travel (0.5 -> 0.25 of scroll delta) and spawns 100px left of the cursor's position when scrolling began
 Zoom-compensating halo capped at 2.5x (was enormous at max zoom-out); same halo added to all header toggles (movement assist, locked zoom, bio) — email span excluded
 Toggle hit halo now compensates for zoom: panzoom exposes 1/current-zoom as --hs and the halo scales by it, staying a constant size on screen (buttons were hard to click when zoomed out)

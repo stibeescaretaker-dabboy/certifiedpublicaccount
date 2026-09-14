@@ -598,10 +598,10 @@
   var sfEl = null, sfTimer = 0, sfX = 0;
   function sfEvent(dx, dy, cursorX) {
     clearTimeout(sfTimer);
-    if (!sfEl) { /* fresh gesture: spawn 100px left of the cursor, mid-screen */
+    if (!sfEl) { /* fresh gesture: spawn offset AWAY from center — cursor on the left half: 100px left; right half: 100px right */
       sfEl = vcMake();
       sfEl.src = ROOT + 'assets/images/cursor-closed.png';
-      sfX = cursorX - 100;
+      sfX = cursorX < vw / 2 ? cursorX - 100 : cursorX + 100;
       sfEl.style.left = sfX + 'px';
       sfEl.style.top = (vh * 0.5) + 'px';
       sfEl.classList.add('show');

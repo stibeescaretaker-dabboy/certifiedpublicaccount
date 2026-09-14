@@ -110,8 +110,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   position: fixed;
   left: -200px;
   top: -200px;
-  width: 38px;
-  height: auto;
+  height: 32px;      /* matches the OS cursor render size (browsers clamp cursors to 32px) */
+  width: auto;
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
