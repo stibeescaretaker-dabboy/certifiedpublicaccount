@@ -593,14 +593,16 @@
   }
   /* scroll fist: one fist per gesture that moves opposite the scroll with no
      per-event cap; when it runs off the top or bottom of the screen it resets
-     to mid-screen and starts over. Stops → opens and fades 2s. */
-  var sfEl = null, sfTimer = 0;
-  function sfEvent(dx, dy) {
+     to mid-screen and starts over. Spawns 100px left of where the cursor was
+     when scrolling began. Stops → opens and fades 2s. */
+  var sfEl = null, sfTimer = 0, sfX = 0;
+  function sfEvent(dx, dy, cursorX) {
     clearTimeout(sfTimer);
-    if (!sfEl) { /* fresh gesture: spawn mid-screen */
+    if (!sfEl) { /* fresh gesture: spawn 100px left of the cursor, mid-screen */
       sfEl = vcMake();
       sfEl.src = ROOT + 'assets/images/cursor-closed.png';
-      sfEl.style.left = (vw * 0.5) + 'px';
+      sfX = cursorX - 100;
+      sfEl.style.left = sfX + 'px';
       sfEl.style.top = (vh * 0.5) + 'px';
       sfEl.classList.add('show');
     } else { /* continuing: re-close and keep moving */
@@ -608,7 +610,7 @@
       sfEl.classList.remove('fade', 'fade2');
       sfEl.classList.add('show');
     }
-    var y = parseFloat(sfEl.style.top) - dy * 0.5; /* opposite the scroll, no cap */
+    var y = parseFloat(sfEl.style.top) - dy * 0.25; /* opposite the scroll, slower, no cap */
     if (y < 0 || y > vh) y = vh * 0.5;             /* ran off the edge: reset and start over */
     sfEl.style.top = y + 'px';
     sfTimer = setTimeout(sfStop, 150);
@@ -679,7 +681,7 @@
       return;
     }
     if (trackpadLike(e, dy)) { /* two-finger scroll → pan like a traditional site */
-      sfEvent(dx, dy);
+      sfEvent(dx, dy, e.clientX);
       if (axisBox && axisBox.checked) {
         if (!axis && Math.abs(dx) + Math.abs(dy) > 20) axis = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
         if (axis === 'x') dy = 0; else if (axis === 'y') dx = 0;
