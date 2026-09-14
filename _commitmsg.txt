@@ -1,3 +1,4 @@
+read/img hit area: more generous (left 45px, right 25px, top/bottom 22px halo)
 Scroll fist: back to one persistent fist per gesture (per-event cap reverted), moving opposite the scroll unclamped — when it runs off the top or bottom of the screen it resets to mid-screen and starts over
 Pinch sensitivity up again (0.005 -> 0.012); scroll fist reworked: every scroll tick spawns its own fist offset opposite the scroll from mid-screen (marching trail, no clamp/cap) — the persistent stuck-looking fist is gone
 Trackpad feel: pinch zoom 3x more sensitive (0.0016 -> 0.005 coefficient); pinch pair straddles the cursor diagonally at 45 degrees starting 270px apart; scroll fist spawns halfway up, tracks rapid scrolling (per-event movement capped at 40px so it never clamps)

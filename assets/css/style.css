@@ -254,9 +254,10 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   margin-top: 1.5em; margin-right: 3em;   /* one full line below the text above */
 }
 /* forgiving hit area: invisible padding around the toggle lets clicks slightly
-   off the visible box still register — appearance unchanged. */
+   off the visible box still register — appearance unchanged. Extra room on the
+   left (the side users tend to undershoot when aiming at the square). */
 .read-toggle::after {
-  content: ''; position: absolute; left: -18px; right: -18px; top: -18px; bottom: -18px;
+  content: ''; position: absolute; left: -45px; right: -25px; top: -22px; bottom: -22px;
 }
 .read-toggle { position: relative; }
 .read-toggle + .read-toggle { margin-left: 1.2em; } /* tighter gap so both sit snugly together */
