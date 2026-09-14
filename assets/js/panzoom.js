@@ -53,7 +53,7 @@
     /* keep the toggle hit-halo a constant SCREEN size: expose 1/s so CSS can
        grow the halo in world px as you zoom out (otherwise it shrinks with the
        world and buttons become hard to click when zoomed out) */
-    if (s !== hitSLast) { hitSLast = s; document.documentElement.style.setProperty('--hs', String(1 / s)); }
+    if (s !== hitSLast) { hitSLast = s; document.documentElement.style.setProperty('--hs', String(Math.min(2.5, 1 / s))); } /* capped: max 2.5x so the halo isn't enormous at max zoom-out */
   }
   var hitSLast = 0;
   /* ---- fluid panning: coalesce pan/zoom style writes to one per frame ----

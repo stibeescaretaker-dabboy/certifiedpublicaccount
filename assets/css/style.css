@@ -66,7 +66,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 /* ---- movement assist toggle ---- */
 .assist-toggle {
-  display: inline-block;
+  display: inline-block; position: relative;
   margin-left: 21em; /* 1.5x the previous 14em offset */
   margin-top: 0.4em;
   color: #fff; /* same size/style as the instruction text */
@@ -74,6 +74,12 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   white-space: nowrap;
   user-select: none;
   -webkit-user-select: none;
+}
+/* forgiving hit area (same zoom-compensating halo as the read/img toggles) */
+.assist-toggle::after {
+  content: ''; position: absolute;
+  left: calc(-40px * var(--hs, 1)); right: calc(-20px * var(--hs, 1));
+  top: calc(-18px * var(--hs, 1)); bottom: calc(-18px * var(--hs, 1));
 }
 .assist-toggle input {
   transform: scale(2.8); /* twice the previous 1.4 */
@@ -91,12 +97,13 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   cursor: url("../images/click%20fist.png") 12 12, pointer;
 }
 
-/* the email address sits beside the bio toggle on the SAME line, same style but blue */
+/* the email address sits beside the bio toggle on the SAME line, same style but blue (no halo: not clickable) */
 .assist-toggle.email {
   margin-left: 0.5em;
   color: #3aa0ff;
   cursor: default;
 }
+.assist-toggle.email::after { content: none; }
 
 /* ---- virtual fist cursors (touch devices; one per finger) ---- */
 .virtual-cursor {
