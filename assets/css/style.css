@@ -255,9 +255,14 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 /* forgiving hit area: invisible padding around the toggle lets clicks slightly
    off the visible box still register — appearance unchanged. Extra room on the
-   left (the side users tend to undershoot when aiming at the square). */
+   left (the side users tend to undershoot when aiming at the square).
+   --hs (set by panzoom.js) is 1/current-zoom, so the halo stays the same size
+   on screen at any zoom level (world px shrink as you zoom out; halo grows to
+   compensate). */
 .read-toggle::after {
-  content: ''; position: absolute; left: -45px; right: -25px; top: -22px; bottom: -22px;
+  content: ''; position: absolute;
+  left: calc(-45px * var(--hs, 1)); right: calc(-25px * var(--hs, 1));
+  top: calc(-22px * var(--hs, 1)); bottom: calc(-22px * var(--hs, 1));
 }
 .read-toggle { position: relative; }
 .read-toggle + .read-toggle { margin-left: 1.2em; } /* tighter gap so both sit snugly together */

@@ -48,7 +48,14 @@
     tx = Math.min(Math.max(tx, Math.min(loX, hiX)), Math.max(loX, hiX));
     ty = Math.min(Math.max(ty, Math.min(loY, hiY)), Math.max(loY, hiY));
   }
-  function apply() { world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')'; }
+  function apply() {
+    world.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+    /* keep the toggle hit-halo a constant SCREEN size: expose 1/s so CSS can
+       grow the halo in world px as you zoom out (otherwise it shrinks with the
+       world and buttons become hard to click when zoomed out) */
+    if (s !== hitSLast) { hitSLast = s; document.documentElement.style.setProperty('--hs', String(1 / s)); }
+  }
+  var hitSLast = 0;
   /* ---- fluid panning: coalesce pan/zoom style writes to one per frame ----
      phones fire pointermove faster than the screen refreshes; writing the
      transform for every event wastes work and reads as sluggish. Both move
