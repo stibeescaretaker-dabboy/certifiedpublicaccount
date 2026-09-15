@@ -1,3 +1,4 @@
+Locked zoom now starts OFF (checkbox unchecked by default)
 Overlay scroll fixes: img-mode pointerdown no longer preventDefaults (canceling pointerdown was suppressing the native scroll that follows); img-mode wheel now only zooms on ctrl/pinch, plain wheel scrolls natively; mouse drag-scroll yields to the zoom pan while zoomed in
 Virtual fist cursors sized to 32px tall (matches OS cursor render size; was 38px wide = ~61px tall)
 Scroll fist spawns 100px away from the cursor on the side it's on (left half -> left, right half -> right)
