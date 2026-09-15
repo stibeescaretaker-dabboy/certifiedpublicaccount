@@ -341,7 +341,9 @@
       if (e.button !== undefined && e.button !== 0) return;
       try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
       oPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      e.preventDefault();
+      /* NO preventDefault here: canceling pointerdown suppresses the native
+         scroll that follows — the cause of the "funky, almost not working"
+         overlay scrolling. Native scroll stays active until zoomed in. */
       if (oPointers.size >= 2) {
         var pts = Array.from(oPointers.values());
         var d = Math.max(dist(pts[0], pts[1]), 24);
@@ -380,6 +382,7 @@
     window.addEventListener('pointercancel', oEnd);
     overlay.addEventListener('wheel', function (e) {
       if (!page.classList.contains('img-mode')) return; /* text mode scrolls natively */
+      if (!e.ctrlKey) return; /* plain wheel/trackpad scroll: native (works at 1x and while zoomed) */
       e.preventDefault();
       var f = Math.exp(-e.deltaY * 0.0016);
       var noz = Math.min(8, Math.max(1, oz * f));
@@ -447,6 +450,7 @@
     var dragScrolling = false, dragStartY = 0, dragStartScroll = 0;
     overlay.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'touch') return;   /* native scroll handles touch */
+      if (page.classList.contains('img-mode') && oz > 1.01) return; /* zoomed img view pans via oPointers instead */
       if (e.button !== undefined && e.button !== 0) return;
       if (e.target.closest && e.target.closest('.read-close')) return;  /* close stays a click */
       dragScrolling = true;
