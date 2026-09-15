@@ -13,7 +13,6 @@ html.large-text { --fs: 1.77; } /* large text: 4 font sizes bigger than the desk
    The divisors equal the default scale, so non-large rendering is pixel-identical. */
 html.large-text .wip { height: calc(231px * var(--fs)); } /* the WIP lines' container grows with the text */
 html.large-text .wip .m { top: calc(111px * var(--fs)); } /* second WIP row stays below the first instead of overlapping */
-html.large-text .baro-amp { width: calc(74px * var(--fs)); } /* "&" column widens with its glyph */
 html.large-text .howto { margin-top: calc(380px * var(--fs) / 1.21); } /* phone header gap keeps pace */
 html, body {
   width: 100%; height: 100%; overflow: hidden; background: #000;
@@ -173,29 +172,34 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .sec4 img { width: 76%; margin: 0 auto; }
 .sec5 img { width: 92%; margin: 0 auto; }
 
-/* ---- section 3 : barotrauma (mockup layout) ---- */
-/* vertical italic title beside the image; caption line runs below with the
-   oversized "7", the "&" under the vertical text, medium info right-aligned */
+/* both titles VERTICAL, stacked side by side with the "&" between them
+   (feedback: one vertical + one horizontal read wrong) */
 .secbaro { padding: 340px 160px 280px; }
-.baro-row { display: flex; gap: 120px; align-items: center; }
+.baro-row { display: flex; gap: 60px; align-items: flex-end; }
 .baro-vert {
   flex: none; width: max-content; white-space: nowrap; /* ONE vertical line, no wrapping */
-  align-self: flex-end; /* start (bottom end) of the vertical text lines up with the IMG_0027 row below */
-  margin-bottom: calc(-180px * var(--fs)); /* whole text block sits 2 lines lower, in step with baro-bottom */
-  color: #fff; font-style: italic; font-size: calc(64px * var(--fs)); /* bumped from 44px: title read small */
+  margin-bottom: calc(-180px * var(--fs)); /* whole text block sits 2 lines lower */
+  color: #fff; font-style: italic; font-size: calc(64px * var(--fs));
   writing-mode: vertical-rl; transform: rotate(180deg); /* reads bottom-to-top */
 }
-.baro-row img { flex: 1; min-width: 0; height: auto; }
+.baro-amp {
+  flex: none; width: max-content; font-size: calc(64px * var(--fs)); font-weight: bold;
+  margin-bottom: calc(-180px * var(--fs)); /* starts level with the two titles' start */
+  color: #fff; writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.baro-line {
+  flex: none; width: max-content; white-space: nowrap; /* one vertical line */
+  margin-bottom: calc(-180px * var(--fs));
+  color: #fff; font-style: italic; font-size: calc(60px * var(--fs));
+  writing-mode: vertical-rl; transform: rotate(180deg); /* reads bottom-to-top, starts level with the title */
+}
+.baro-row img { flex: 1; min-width: 0; height: auto; align-self: center; }
 .baro-bottom {
-  display: flex; align-items: flex-start; gap: 60px;
-  margin-top: calc(180px * var(--fs)); /* 2 lines below the image row, level with the vertical title's start */
+  margin-top: calc(180px * var(--fs)); /* keeps the 2-line-lower relationship */
   color: #fff;
 }
-.baro-amp { flex: none; width: 90px; text-align: center; font-size: calc(64px * var(--fs)); font-weight: bold;
-  margin-top: calc(90px * var(--fs)); } /* bold, one line beneath the IMG_0027 text, in the gap between the two texts */
-.baro-line { flex: 1; font-style: italic; font-size: calc(60px * var(--fs)); } /* bumped from 42px */
 .baro-line b { font-style: normal; font-weight: bold; font-size: 1.3em; }
-.baro-meta { flex: none; font-weight: bold; font-size: calc(38px * var(--fs)); align-self: baseline; } /* baseline-aligned with the IMG_0027 line */
+.baro-meta { font-weight: bold; font-size: calc(38px * var(--fs)); }
 .secstatement { background: #000; padding: 440px 360px; }
 .secstatement h2 { color: #fff; font-size: calc(82px * var(--fs)); font-weight: bold; margin-bottom: 140px; }
 .secstatement p { color: #fff; font-size: calc(40px * var(--fs)); line-height: 1.6; max-width: 2900px; margin: 0 auto 120px; padding-left: 480px; }
