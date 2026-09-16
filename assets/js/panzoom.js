@@ -99,21 +99,12 @@
       clamp(); apply();
       return;
     }
-    /* free mode: start zoomed in on the "Click/tap and drag" text */
-    var el = document.querySelector('.howto');
-    /* measure the words themselves at scale 1 — offsetWidth spans the whole
-       header column, which framed the text off-center and half off-screen */
-    world.style.transform = 'none';
-    var rng = document.createRange();
-    rng.selectNodeContents(el);
-    var b = rng.getBoundingClientRect();
-    var wr = world.getBoundingClientRect();
-    var wx = b.left - wr.left + b.width * 0.5;
-    var wy = b.top - wr.top + b.height * 0.5;
-    /* 3 extra scroll-wheel ticks of zoom: each tick is ~exp(0.16) = 1.174x */
-    s = Math.min(Math.max((vw / (b.width + 700)) * Math.exp(0.16 * 3), MIN_S), 2.5);
-    tx = vw * 0.5 - wx * s;
-    ty = vh * 0.5 - wy * s;
+    /* free mode: start at the same zoom as right after untoggling locked zoom
+       (locked fit scale x 0.85), column centered horizontally, top flush up */
+    var fit = Math.max(vw / COL_W, vh / colH); /* the locked-zoom fit scale */
+    s = Math.min(Math.max(fit * 0.85, MIN_S), 2.5);
+    tx = vw * 0.5 - (COL_X + COL_W * 0.5) * s;
+    ty = -COL_Y * s;
     clamp(); apply();
   }
   function zoomAt(cx, cy, f) {
